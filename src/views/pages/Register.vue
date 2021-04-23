@@ -34,7 +34,7 @@
                 >
                   <template #prepend-content><CIcon name="cil-lock-locked"/></template>
                 </CInput>
-                <CButton color="success" block>Create Account</CButton>
+                <CButton v-on:click="register()" color="success" block>Create Account</CButton>
               </CForm>
             </CCardBody>
             <CCardFooter class="p-4">
@@ -60,6 +60,12 @@
 
 <script>
 export default {
-  name: 'Register'
+  name: 'Register',
+  methods:{
+    register(){
+      this.$router.push('/dashboard')
+    }
+  }
+  
 }
 </script>

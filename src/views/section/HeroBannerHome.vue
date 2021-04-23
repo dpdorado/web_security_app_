@@ -1,7 +1,5 @@
-<template>
-    <main class="side-main">
-    <!--================ Hero sm Banner start =================-->      
-        <section class="hero-banner mb-30px">
+<template>       
+    <section class="hero-banner mb-30px">
         <div class="container">
             <div class="row">
             <div class="col-lg-7">
@@ -18,15 +16,14 @@
             </div>
             </div>
         </div>
-    </section>
-    </main>
-    <!--================ Hero sm Banner end =================-->
+    </section>    
+
+    
 </template>
 
 <script>
-//import "@/assets/start/css/style.css";
 export default {
-  name: 'Start',  
+  name: 'HeroBannerHome',  
   components: {
     
   },
@@ -35,4 +32,3 @@ export default {
   }
 }
 </script>
-

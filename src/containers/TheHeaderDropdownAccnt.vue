@@ -59,9 +59,10 @@
     <CDropdownItem>
       <CIcon name="cil-shield-alt" /> Lock Account
     </CDropdownItem>
-    <CDropdownItem>
-      <CIcon name="cil-lock-locked" /> Logout
+    <CDropdownItem to="/home">
+      <CIcon name="cil-lock-locked" /> Logout            
     </CDropdownItem>
+    
   </CDropdown>
 </template>
 

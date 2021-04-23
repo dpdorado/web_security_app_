@@ -7,7 +7,7 @@ const TheContainerInit = () => import('@/containers/TheContainerInit')
 
 // Views
 const Dashboard = () => import('@/views/Dashboard')
-const Start = () => import('@/views/Start')
+const Home = () => import('@/views/Home')
 
 
 const Colors = () => import('@/views/theme/Colors')
@@ -90,28 +90,28 @@ export default new Router({
 
 function configRoutes () {
   return [   
-    /*{
+    {
       path: '/',
-      redirect: '/start',
-      name: 'Start',
+      redirect: '/home',
+      name: 'Home_',
       component: TheContainerInit,
       children: [
         {
-          path: 'start',
-          name: 'Start',
-          component: Start
+          path: 'home',
+          name: 'Home',
+          component: Home
         },
       ]
-    },*/
+    },
     {
       path: '/',
       redirect: '/dashboard',
-      name: 'Home',
+      name: 'Dashboard',
       component: TheContainer,
       children: [
         {
           path: 'dashboard',
-          name: 'Dashboard',
+          name: 'Das',
           component: Dashboard
         },        
         {

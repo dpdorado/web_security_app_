@@ -1,32 +1,26 @@
 <template>
-  <div class="c-app">
-    <TheSidebar/>
-    <CWrapper>
-      <TheHeader/>
-      <div class="c-body">
-        <main class="c-main">
-          <CContainer fluid>
-            <transition name="fade" mode="out-in">
-              <router-view :key="$route.path"></router-view>
-            </transition>
-          </CContainer>
-        </main>
-      </div>
-      <TheFooter/>
-    </CWrapper>
-  </div>
+  <div class="c-app row">        
+    <TheHeader />         
+    <main class="col-12">            
+        <transition name="fade" mode="out-in">
+          <router-view :key="$route.path"></router-view>
+        </transition>              
+    </main>    
+    <TheFooter class="col-12"/>            
+  </div>  
 </template>
 
 <script>
-import TheSidebar from './TheSidebarInit'
+
 import TheHeader from './TheHeaderInit'
 import TheFooter from './TheFooterInit'
-//import "@/assets/start/css/style.css";
+
+import "@/assets/start/css/style.css";
 
 export default {
   name: 'TheContainerInit',
   components: {
-    TheSidebar,
+    //TheSidebar,
     TheHeader,
     TheFooter
   },
@@ -36,4 +30,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

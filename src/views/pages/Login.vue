@@ -24,7 +24,7 @@
                   </CInput>
                   <CRow>
                     <CCol col="6" class="text-left">
-                      <CButton color="primary" class="px-4">Login</CButton>
+                      <CButton v-on:click="login()" color="primary" class="px-4">Login</CButton>                      
                     </CCol>
                     <CCol col="6" class="text-right">
                       <CButton color="link" class="px-0">Forgot password?</CButton>
@@ -47,6 +47,7 @@
                   color="light"
                   variant="outline"
                   size="lg"
+                  v-on:click="register()"
                 >
                   Register Now!
                 </CButton>
@@ -61,6 +62,15 @@
 
 <script>
 export default {
-  name: 'Login'
+  name: 'Login',
+  methods:{
+    login(){
+      this.$router.push('/dashboard')
+    },
+    register(){
+      this.$router.push('/pages/register')
+    }
+
+  }
 }
 </script>
