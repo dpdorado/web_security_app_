@@ -29,7 +29,8 @@
     "test:e2e": "vue-cli-service test:e2e",
     "clearCache": "jest --clearCache",
     "release": "npm-run-all clearCache lint build test:unit test:e2e",
-    "auto-changelog": "auto-changelog  --hide-credit --commit-limit false --package --backfill-limit 0 --starting-version 3.0.0-beta.0"
+    "auto-changelog": "auto-changelog  --hide-credit --commit-limit false --package --backfill-limit 0 --starting-version 3.0.0-beta.0",
+    "start": "node server.js"
   },
   "dependencies": {
     "@coreui/coreui": "^3.4.0",
@@ -40,10 +41,12 @@
     "@coreui/vue-chartjs": "^1.0.6",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "express": "^4.17.1",
     "jquery": "^3.6.0",
     "jw-vue-pagination": "^1.0.3",
     "popper.js": "^1.16.1",
     "save": "^2.4.0",
+    "serve-static": "^1.14.1",
     "v-validate": "^0.1.4",
     "vee-validate": "^3.0.11",
     "vue": "~2.6.12",
