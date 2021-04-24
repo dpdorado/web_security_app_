@@ -22,7 +22,7 @@ import TestimonialSectionHome from './section/TestimonialSectionHome'
 import ClientsLogoHome from './section/ClientsLogoHome'
 
 export default {
-  name: 'Start',  
+  name: 'Home',  
   components: {
     HeroBannerHome,
     FeatureSectionHome,

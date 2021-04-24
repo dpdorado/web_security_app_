@@ -7,7 +7,10 @@ const TheContainerInit = () => import('@/containers/TheContainerInit')
 
 // Views
 const Dashboard = () => import('@/views/Dashboard')
+
+//Home
 const Home = () => import('@/views/Home')
+const ContactHome = () => import('@/views/contact/ContactHome')
 
 
 const Colors = () => import('@/views/theme/Colors')
@@ -100,7 +103,22 @@ function configRoutes () {
           path: 'home',
           name: 'Home',
           component: Home
-        },
+        },        
+        {
+          path: 'home',
+          redirect: '/home/contact',
+          name: 'Contact_',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'contact',
+              name: 'Contact',
+              component: ContactHome
+            }
+          ]
+        }
       ]
     },
     {

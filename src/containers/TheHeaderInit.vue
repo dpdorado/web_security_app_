@@ -5,7 +5,7 @@
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container box_1620">
           <!-- Brand and toggle get grouped for better mobile display -->
-          <a class="navbar-brand logo_h" href="index.html"><img src="@/assets/start/img/logo.png" alt=""></a>
+          <a class="navbar-brand logo_h" href="index.html"><img src="@/assets/start/img/web_security_app.png" alt=""></a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -25,7 +25,7 @@
                   <li class="nav-item"><a class="nav-link" href="blog-details.html">Blog Details</a></li>
                 </ul>
 							</li>
-              <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+              <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/contact'">Contact</router-link></li>
             </ul>
 
             <!--<ul class="navbar-right">              
