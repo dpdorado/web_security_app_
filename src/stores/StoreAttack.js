@@ -15,7 +15,8 @@ export default{
             name: '',
             state: false,    
             description: '',
-            owas_id: '',
+            price: 0,
+            owas_id: '',            
             script: '',
             category: ''                                    
         }           
@@ -49,10 +50,7 @@ export default{
         },
         set_attack(state, attack){
             state.attack = attack
-        },
-        set_loading(state, loading){
-            state.loading = loading;
-        }
+        }        
         /*set_categories(state, categories){            
             state.caategories=categories
         },*/
@@ -73,12 +71,13 @@ export default{
         remove_attack({commit}, id){
             const path = 'http://3.14.19.238:8000/pentesting/attack_delete/'+id;
             axios.delete(path).then(response => {    
-                //console.log(response);                       
+                console.log(response);                       
                 commit('set_errored', false);          
                 commit('set_succed', true);                  
                 commit('set_success', {'message':'¡Attaque eliminado correctamente!!!'});               
             })
             .catch(error => {
+                console.log(error);                       
                 commit('set_errored', true);
                 commit('set_errors', {'message': '¡No se ha podido eliminar el ataque!, intentelo más tarde.'})                       
             })

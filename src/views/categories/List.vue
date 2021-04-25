@@ -112,10 +112,28 @@
                 </thead>
           
                 <tbody >                  
-                  <tr v-for="(category,index) in pageOfItems" v-bind:key="category.id">                    
-                    <th scope="row"> {{index+1}}</th>
-                    <td>{{category.category_name}}</td>
-                    <td>{{category.description}}</td>                                              
+                  <tr v-for="(category,index) in pageOfItems" v-bind:key="category.id">  
+                    <th scope="row">{{index+1}}</th> 
+                    <td>
+                      <div v-if = "index_edit != index">
+                        <label @dblclick = "index_edit=-1"> {{category.category_name}} </label>
+                      </div>
+                      <input name="category_name" 
+                        v-else-if = "index_edit == index" 
+                        v-model = "category.category_name" 
+                        v-on:blur= "item.edit=false;" 
+                        @keyup.enter = "index_edit=-1; save_category(category)">
+                    </td>
+                    <td>
+                      <div v-if = "index_edit != index">
+                        <label @dblclick = "index_edit=-1"> {{category.description}} </label>
+                      </div>
+                      <input name="description" 
+                        v-else-if = "index_edit == index" 
+                        v-model = "category.description" 
+                        v-on:blur= "item.edit=false;" 
+                        @keyup.enter = "index_edit=-1; save_category(category)">
+                    </td>                                                                                                  
                     <td>                        
                         <section v-if="category.state"> 
                             <span class="badge badge-pill badge-primary">Activo</span>
@@ -128,14 +146,14 @@
                     <td>
                         <div v-if="index_edit== index">
                             <div class="btn-toolbar text-right">                                                
-                                <button  v-on:click="save_category(category, index)" class="btn btn-success btn-sm mr-3"><CIcon name="cil-check-alt"/></button>                                                                    
+                                <button  v-on:click="save_category(category)" class="btn btn-success btn-sm mr-3"><CIcon name="cil-check-alt"/></button>                                                                    
                                 <button  v-on:click="cancel_edit()" class="btn btn-danger  btn-sm"><CIcon name="cil-x"/></button>                           
                             </div>
                         </div>                 
 
                         <div v-else>              
                             <div class="btn-toolbar text-right">                                                
-                                <button  v-on:click="edit_category(category, index)" class="btn btn-primary btn-sm mr-3"><CIcon name="cil-pencil"/></button>                                                                    
+                                <button  v-on:click="edit_category(index)" class="btn btn-primary btn-sm mr-3"><CIcon name="cil-pencil"/></button>                                                                    
                                 <button  @click="darkModal = true, category_deleted = category" class="btn btn-danger  btn-sm"><CIcon name="cil-trash"/></button>                           
                             </div>                    
                         </div>                        
@@ -164,7 +182,7 @@
           </template>
           <template #footer>
             <CButton @click="darkModal = false" color="danger">Cancelar</CButton>
-            <CButton v-on:click="delete_category()" color="success">Eliminar</CButton>
+            <CButton v-on:click="remove_category()" color="success">Eliminar</CButton>
           </template>
         </CModal>           
       </CCardBody>
@@ -175,7 +193,7 @@
 
 <script>
   import axios from "axios";
-  import Vuex from 'vuex';
+  //import Vuex from 'vuex';
 
   const customLabels = {
     first: '<<',
@@ -201,13 +219,36 @@
         pageOfItems: [],
         customLabels,    
         selectedUser: null,
-        index_edit: -1,
+        index_edit: -1,        
         categor:{
             category_name: '',
             state: false,    
             description: ''                            
         },
-        create_category: false
+        create_category: false,
+        /*categories_prueba:[
+          {
+            id: 1,
+            category_name: 'Categoria 1',
+            state: true,    
+            description: 'Categoria 1'                            
+
+          },
+          {
+            id: 2,
+            category_name: 'Categoria 2',
+            state: true,    
+            description: 'Categoria 2'                            
+
+          },
+          {
+            id: 3,
+            category_name: 'Categoria 3',
+            state: true,    
+            description: 'Categoria 3'                            
+
+          },
+        ]*/
       }
     }, 
     filters: {      
@@ -216,32 +257,36 @@
     },
     methods: {
       //...Vuex.mapActions('StoreAttack',['get_attacks', 'remove_attack','attack_aux']),
-        send_form(e){
-            e.preventDefault();          
+      clean_form(){
+        this.categor.category_name='';
+        this.categor.state=false;
+        this.categor.description='';
+      },
+      send_form(e){          
+          e.preventDefault();          
 
-            axios.post('http://3.14.19.238:8000/pentesting/category_create/', this.categor)
-            .then(response => {
-                //console.log(response)
-                this.succed=true;
-                this.success = [];    
-                this.success.push({'message': 'La categoría:'+this.categor.category_name+' ha sido registrada correctamente.'});
-                this.create_category= false;
-                this.get_categories()
-            })
-            .catch(error => {
-                //Mirar los errores que esta devolviendo
-                console.log(error);
-                
-                this.errored = true;
-                this.errors = [];
-                this.errors.push({'message':'No se ha podido realizar el registro, revise que la categoría no exista.'})            
-            })
-            .finally(() => this.loading = false);                           
-        },
+          axios.post('http://3.14.19.238:8000/pentesting/category_create/', this.categor)
+          .then(response => {
+              console.log(response)
+              this.succed=true;
+              this.success = [];    
+              this.success.push({'message': 'La categoría:'+this.categor.category_name+' ha sido registrada correctamente.'});
+              this.create_category= false;
+              this.clean_form();
+              this.get_categories()
+          })
+          .catch(error => {              
+              console.log(error);                
+              this.errored = true;
+              this.errors = [];
+              this.errors.push({'message':'No se ha podido realizar el registro, revise que la categoría no exista.'})            
+          })
+          .finally(() => this.loading = false);                           
+      },
       get_categories(){
             const path = 'http://3.14.19.238:8000/pentesting/category_list/';                
             axios.get(path).then(response => {    
-                //console.log(response);   
+                console.log(response);   
                 this.categories = response.data;                            
             }).catch(error => {
                 console.log(error);     
@@ -251,59 +296,67 @@
             }).finally(() => this.loading = false);               
         },
 
-      delete_category(){        
+      remove_category(){        
         this.darkModal = false;
         const path = 'http://3.14.19.238:8000/pentesting/category_delete/'+this.category_deleted.id;
         axios.delete(path).then(response => {                           
+            console.log(response);   
             this.succed = true;
             this.success=[];
             this.success.push({'message':'¡La categoría '+this.category_deleted.category_name+' ha sido eliminada!'})
             this.get_categories();
         })
         .catch(error => {
-             this.succed = false;
-            this.get_categories();
+            console.log(error); 
+            this.succed = false;
+            //this.get_categories();
             this.errored= true;
             this.errors=[];
             this.errors.push({'message':'¡La categoría no se ha podido eliminar, Intentelo más tarde o contacte con el administrador!!!'});                
             
         })
         .finally(() => this.loading = false);
+      },      
+      edit_category(index){    
+          this.delete_errores_and_success();                    
+          this.index_edit=index;             
       },
-      /**
-       * Editar ataque con id
-       */
-      edit_category(category, index){
-          this.index_edit=index;
-          console.log('la tenemos');
-          /*this.attack_aux(attack);
-          this.$router.push({ path: '/attack/edit/'+attack.id})*/
-          //this.$router.push('/attack/edit')
-      },
-      save_category(category){
-        this.index_edit=-1;
+      save_category(category){       
+        this.index_edit=-1;        
+        axios.put('http://3.14.19.238:8000/pentesting/category_update/'+category.id, category)
+          .then(response => {
+              console.log(response); 
+              this.succed  = true;
+              this.errored = false;
+              this.success = [];
+              this.success.push({'message':'La categoria: '+category.category_name+' ha sido actualizada correctamente.'});                                       
+              //this.$router.push('/category/list');
+          })
+          .catch(error => {
+              console.log(error); 
+              this.succed=false;             
+              this.errored = true;
+              this.errors = [];
+              this.errors.push({'message':'No se ha podido actualizar la categoria, revise que los datos eran correctos.'})            
+        })
+        .finally(() => this.loading = false);  
       },
       cancel_edit(){
-          this.index_edit=-1;
+          this.index_edit=-1;          
       },      
       cancel_create(){
           this.create_category=false;
-          this.$f_.reset();
-      },   
-        /**
-       * Mostrar un ataque ataque con id
-       */
-      show_category(category){
-          /*this.attack_aux(attack);
-          this.$router.push({ path: '/attack/show/'+attack.id })*/
-          //this.$router.push('/attack/edit')
-      },
-      /**
-       * Editar ataque con id
-       */
-      create_category_(){
+          this.clean_form();
+      },                 
+      create_category_(){          
+          this.delete_errores_and_success();
           this.create_category = true;
       },
+      delete_errores_and_success(){
+        this.errored = false;
+        this.succed=false;
+      }
+      ,
       onChangePage(pageOfItems) {
           // update page of items
           this.pageOfItems = pageOfItems;
@@ -326,6 +379,9 @@
 <style scoped>
     .red{        
         color:red;
+    }
+    td {    
+      width: 300px;  
     }
 
 </style>

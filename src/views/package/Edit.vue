@@ -53,6 +53,12 @@
                                             </div>                                                                                   
                                         </div>                                        
 
+                                        <div class="form-row">                                                                                                                                    
+                                          <div class="col mb-3">
+                                              <label for="price">Precio ($):<span class="red">*</span></label>
+                                              <input placeholder="Price of the package"  type="text" class="form-control overflow-auto" v-model="package_o.price" value="package_.price" id="price" name="price" required>
+                                          </div>                                        
+                                        </div>
                                        <div class="form-row ">
                                             <div class="col mb-3">
                                                 <label for="description">Descripción:<span class="red">*</span></label>
@@ -152,12 +158,12 @@
             e.preventDefault();          
             this.set_id_attacks();
             axios.put('http://3.14.19.238:8000/pentesting/package_update/'+this.package_o.id, this.package_o)
-            .then(response => {                
+            .then(response => {   
+                console.log(response);               
                 this.add_message_success({'message':'El paquete: '+this.package_o.name+' ha sido actualizado correctamente.'});
                 this.$router.push('/package/list');                
             })
-            .catch(error => {
-                //Mirar los errores que esta devolviendo
+            .catch(error => {            
                 console.log(error);
                 this.succed=false;
                 this.errored = true;
@@ -182,10 +188,7 @@
             for (var i=0;i<this.attacks_sel.length;i++){
                 this.package_o.attacks.push(this.attacks_sel[i].id);
             }
-        },        
-        list_package(){
-            this.$router.push('/package/list');
-        },      
+        },                      
         state_attack(attack){
             if(this.is_attack_add(attack)){
                 this.delete_attack_add(attack);                 

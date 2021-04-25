@@ -43,11 +43,18 @@
                                                 <input placeholder="Package state" type="text" class="form-control overflow-auto" id="state" name=state :value="state"  disabled>
                                             </div>                                                                                   
                                         </div>                                        
+                                        
+                                        <div class="form-row">                                    
+                                          <div class="col mb-3">                    
+                                              <label for="price" >Precio ($): </label>
+                                              <input placeholder="Package price" type="text" class="form-control overflow-auto" id="price" name=price :value="package_.price"  disabled>
+                                          </div>                                                                                                                                                                                                       
+                                        </div>    
 
                                        <div class="form-row ">
                                             <div class="col mb-3">
                                                 <label for="description">Descripción:</label>
-                                                <textarea placeholder="package description"  class="form-control overflow-auto" id="description" value="package_.description" name="description" rows="4" min="25" disabled></textarea>                    
+                                                <textarea placeholder="package description"  class="form-control overflow-auto" id="description" :value="package_.description" name="description" rows="4" min="25" disabled></textarea>                    
                                             </div>
                                         </div>
                                          
@@ -92,7 +99,7 @@
 </template>>
 
 <script>
-  import axios from "axios";
+  //import axios from "axios";
   import Vuex from 'vuex';
 
 

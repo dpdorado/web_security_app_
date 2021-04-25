@@ -71,6 +71,13 @@
                                           </div>                                        
                                       </div>
 
+                                       <div class="form-row">                                                                                                                                    
+                                          <div class="col mb-3">
+                                              <label for="price">Precio ($):<span class="red">*</span></label>
+                                              <input placeholder="Price of the attack"  type="text" class="form-control overflow-auto" v-model="attack_o.price" value="attack.price" id="price" name="price" required>
+                                          </div>                                        
+                                      </div>
+
                                       <div class="form-row ">
                                           <div class="col mb-3">
                                               <label for="description">Descripción:<span class="red">*</span></label>
@@ -146,11 +153,11 @@
           const path = 'http://3.14.19.238:8000/pentesting/category_list/';          
         
         axios.get(path).then(response => {      
-          //console.log(response.data)
+          console.log(response)
           this.categories = response.data
         })
         .catch(error => {
-          //console.log(error)
+          console.log(error)
           this.errored = true
         })
         .finally(() => this.loading = false)
@@ -159,10 +166,11 @@
         const path = 'http://3.14.19.238:8000/pentesting/category_search/'+this.attack.category;          
         
         axios.get(path).then(response => {                
+          console.log(response);  
           this.category_name = response.data.category_name;
         })
         .catch(error => {
-          //console.log(error)
+          console.log(error)
           this.errored = true
         })
         .finally(() => this.loading = false)
@@ -172,13 +180,12 @@
 
           axios.put('http://3.14.19.238:8000/pentesting/attack_update/'+this.attack_o.id, this.attack_o)
           .then(response => {
-              //console.log(response)            
+              console.log(response)            
               this.add_message_success({'message':'El ataque: '+this.attack_o.name+' ha sido actualizado correctamente.'});                  
               this.$router.push('/attack/list');
           })
-          .catch(error => {
-              //Mirar los errores que esta devolviendo
-              //console.log(error); 
+          .catch(error => {              
+              console.log(error); 
               this.succed=false;             
               this.errored = true;
               this.errors = [];

@@ -70,6 +70,12 @@
                                               <input placeholder="Id Owasd of the attack"  type="text" class="form-control overflow-auto" :value="attack.owas_id" id="owas_id" name="owas_id" disabled>
                                           </div>                                        
                                       </div>
+                                      <div class="form-row">                                    
+                                          <div class="col mb-3">                    
+                                              <label for="price" >Precio ($): </label>
+                                              <input placeholder="Attack price" type="text" class="form-control overflow-auto" id="price" name=price :value="attack.price"  disabled>
+                                          </div>                                                                                                                                                                                                       
+                                      </div>            
 
                                       <div class="form-row ">
                                           <div class="col mb-3">
@@ -129,11 +135,11 @@
         const path = 'http://3.14.19.238:8000/pentesting/category_search/'+this.attack.category;          
         
         axios.get(path).then(response => {   
-          //console.log(response.data["Category"][0]);             
+          console.log(response);             
           this.category = response.data["Category"][0];
         })
         .catch(error => {
-          //console.log(error)
+          console.log(error)
           this.errored = true
         })
         .finally(() => this.loading = false)

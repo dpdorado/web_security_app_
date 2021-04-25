@@ -56,6 +56,7 @@
                     <!--<th scope="col">Descripción</th>                  -->
                     <th scope="col">Ataques</th>                  
                     <th scope="col">Estado</th>
+                    <th scope="col">Precio</th>
                     <th >Opciones</th>
                     <!--<th colspan = 2>Opciones</th>-->
                   </tr>
@@ -68,12 +69,13 @@
                     <td>{{package_.attacks.length}}</td>
                     <td>
                       <section v-if="package_.state"> 
-                            <span class="badge badge-pill badge-primary">Activo</span>
-                        </section>
-                        <section v-else>
-                            <span class="badge badge-pill badge-danger">Inactivo</span>
-                        </section>                                              
-                      </td>                    
+                        <span class="badge badge-pill badge-primary">Activo</span>
+                      </section>
+                      <section v-else>
+                          <span class="badge badge-pill badge-danger">Inactivo</span>
+                      </section>                                              
+                    </td>
+                    <td>{{package_.price}}</td>
                     <td  class="">
                       <div class="btn-toolbar text-right">                        
                         <button  v-on:click="show_package(package_)" class="btn btn-success btn-sm mr-3"><CIcon name="cib-cassandra"/></button>                                            
@@ -104,7 +106,7 @@
           </template>
           <template #footer>
             <CButton @click="darkModal = false" color="danger">Cancelar</CButton>
-            <CButton v-on:click="delete_package()" color="success">Eliminar</CButton>
+            <CButton v-on:click="remove_package()" color="success">Eliminar</CButton>
           </template>
         </CModal>           
       </CCardBody>
@@ -154,10 +156,11 @@
       
       get_packages(){
         const path = 'http://3.14.19.238:8000/pentesting/package_list/'                
-        axios.get(path).then(response => {      
+        axios.get(path).then(response => { 
+            console.log(response);       
             this.packages = response.data;                       
         }).catch(error => {
-            //console.log(error);  
+            console.log(error);  
             this.succed_l=false; 
             this.errored_l =true; 
             this.errors_l=[];
@@ -165,26 +168,24 @@
         }).finally(() => this.loading_l=false);                                
       },
       remove_package(){
+          this.darkModal = false;
           const path = 'http://3.14.19.238:8000/pentesting/package_delete/'+this.package_id_deleted;
           axios.delete(path).then(response => {    
-              //console.log(response);   
+              console.log(response);   
               this.errored_l =false;
               this.succed_l=true;
               this.success_l=[];
-              this.success_l.push({'message':'¡El paquete: '+this.package_name_deleted+' ha sido eliminado correctamente!!!'}) 
+              this.success_l.push({'message':'¡El paquete: '+this.package_name_deleted+' ha sido eliminado correctamente!!!'});
+              this.get_packages();
           })
           .catch(error => {
+            console.log(error);  
             this.succed_l=false; 
             this.errored_l =true; 
             this.errors_l=[];
             this.errors_l.push({'message': '¡No se ha podido eliminar el ataque: '+this.package_name_deleted+'!, intentelo más tarde.'});               
           })
           .finally(() => this.loading_l=false);            
-      },
-      delete_package(){
-        this.darkModal = false;        
-        this.remove_package();          
-        this.get_packages();    
       },
       /**
        * Editar ataque con id

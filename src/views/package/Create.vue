@@ -45,7 +45,14 @@
                                                     <option :value="true">Activo</option>           
                                                 </select>
                                             </div>                                                                                   
-                                        </div>                                        
+                                        </div>         
+
+                                         <div class="form-row">                                                                                                                                    
+                                            <div class="col mb-3">
+                                                <label for="price">Precio ($):<span class="red">*</span></label>
+                                                <input placeholder="Price of the package"  type="text" class="form-control" v-model="package_.price" id="price" name="price" required>
+                                            </div>                                        
+                                        </div>                               
 
                                        <div class="form-row ">
                                             <div class="col mb-3">
@@ -144,11 +151,11 @@
             const path = 'http://3.14.19.238:8000/pentesting/category_list/';          
           
           axios.get(path).then(response => {      
-            //console.log(response.data)
+            console.log(response);
             this.categories = response.data
           })
           .catch(error => {
-            //console.log(error)
+            console.log(error)
             this.errored = true
           })
           .finally(() => this.loading = false)
@@ -158,23 +165,18 @@
             this.set_id_attacks();
             axios.post('http://3.14.19.238:8000/pentesting/package_create/', this.package_)
             .then(response => {
+                console.log(response);  
                 this.add_message_success({'message':'El paquete: '+this.package_.name+' ha sido registrado correctamente.'});                  
                 this.$router.push('/package/list');
             })
-            .catch(error => {
-                //Mirar los errores que esta devolviendo
+            .catch(error => {                
                 console.log(error);
                 this.succed=false;
                 this.errored = true;
                 this.errors = [];
                 this.errors.push({'message':'No se ha podido registrar el paquete: '+this.package_.name+', intenetelo más tarde.'})            
           })
-          .finally(() => this.loading = false);
-           
-            //revisar por que despues del axion, no sigue esto de imadiato
-           if (this.succed){
-               this.$router.push('/package/list');
-           }                   
+          .finally(() => this.loading = false);                         
         },
         set_id_attacks(){
             this.package_.attacks=[];

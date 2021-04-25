@@ -15,6 +15,7 @@ export default{
             name: '',
             state: false,    
             description: '',
+            price: 0,
             attacks:[
 
             ]                                  
@@ -58,7 +59,7 @@ export default{
         get_packages({commit}){
             const path = 'http://3.14.19.238:8000/pentesting/package_list/';                
             axios.get(path).then(response => {    
-                //console.log(response.data)  ;
+                console.log(response);
                 const packages = response.data
                 commit('fill_in_packages', packages)
             }).catch(error => {
@@ -70,12 +71,13 @@ export default{
         remove_package({commit}, id){
             const path = 'http://3.14.19.238:8000/pentesting/package_delete/'+id;
             axios.delete(path).then(response => {    
-                //console.log(response);       
+                console.log(response);       
                 commit('set_errored', false);          
                 commit('set_succed', true);                  
                 commit('set_success', {'message':'¡Paquete eliminado correctamente!!!'});               
             })
             .catch(error => {
+                console.log(error);                       
                 commit('set_errored', true);
                 commit('set_errors', {'message': '¡No se ha podido eliminar el paquete!, intentelo más tarde.'})                       
             })

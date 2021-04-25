@@ -62,6 +62,13 @@
                                             </div>                                        
                                         </div>
 
+                                        <div class="form-row">                                                                                                                                    
+                                            <div class="col mb-3">
+                                                <label for="price">Precio ($):<span class="red">*</span></label>
+                                                <input placeholder="Price of the attack"  type="text" class="form-control" v-model="attack.price" id="price" name="price" required>
+                                            </div>                                        
+                                        </div>
+
                                        <div class="form-row ">
                                             <div class="col mb-3">
                                                 <label for="description">Descripción:<span class="red">*</span></label>
@@ -130,11 +137,11 @@
             const path = 'http://3.14.19.238:8000/pentesting/category_list/';          
           
           axios.get(path).then(response => {      
-            //console.log(response.data)
+            console.log(response)
             this.categories = response.data
           })
           .catch(error => {
-            //console.log(error)
+            console.log(error)
             this.errored = true
           })
           .finally(() => this.loading = false)
@@ -143,10 +150,12 @@
             e.preventDefault();                      
             axios.post('http://3.14.19.238:8000/pentesting/attack_create/', this.attack)
             .then(response => {
+                console.log(response);  
                 this.add_message_success({'message':'El ataque: '+this.attack.name+' ha sido registrado correctamente.'});                  
                 this.$router.push('/attack/list');
             })
-            .catch(error => {                            
+            .catch(error => {        
+                console.log(error);                      
                 this.errored = true;
                 this.errors = [];
                 this.errors.push({'message':'No se ha podido realizar el registro, revise que el id owasd o el nombre no este repetidos.'})            

@@ -14,7 +14,7 @@
 
     <!--<img class="mx-auto d-lg-none" src="@/assets/start/img/web_security_app.png" height="48" alt="Web Security App"/>-->
     <CHeaderBrand class="mx-auto d-lg-none" to="/">      
-      <img  src="@/assets/start/img/web_security_app_.png" height="48" alt="Web Security App"/>
+      <img  src="@/assets/start/img/web_security_app_.png" width="160" height="40" alt="Web Security App"/>
     </CHeaderBrand>
 
     <CHeaderNav class="d-md-down-none mr-auto">

@@ -54,7 +54,8 @@
                   <tr >
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>                    
-                    <th scope="col">Id Owasp</th>                  
+                    <th scope="col">Id Owasp</th>
+                    <th scope="col">Precio ($)</th>                  
                     <th scope="col">Opciones</th>                  
                     <!--<th colspan = 2>Opciones</th>-->
                   </tr>
@@ -65,6 +66,7 @@
                     <th scope="row">{{index+1}}</th>
                     <td>{{attack.name}}</td>
                     <td>{{attack.owas_id}}</td>                    
+                    <td>$ {{attack.price}}</td>                    
                     <td  class="">
                       <div class="btn-toolbar text-right">                        
                         <button  v-on:click="show_attack(attack)" class="btn btn-success btn-sm mr-3"><CIcon name="cib-cassandra"/></button>                                            
@@ -95,7 +97,7 @@
           </template>
           <template #footer>
             <CButton @click="darkModal = false" color="danger">Cancelar</CButton>
-            <CButton v-on:click="delete_attack()" color="success">Eliminar</CButton>
+            <CButton v-on:click="remove_attack()" color="success">Eliminar</CButton>
           </template>
         </CModal>           
       </CCardBody>
@@ -147,10 +149,11 @@
       get_attacks(){
         const path = 'http://3.14.19.238:8000/pentesting/attack_list/';                
         axios.get(path).then(response => {      
+            console.log(response);  
             this.attacks = response.data;
             this.edit_attacks(this.attacks);                
         }).catch(error => {
-            //console.log(error);  
+            console.log(error);  
             this.succed_l=false; 
             this.errored_l =true; 
             this.errors_l=[];
@@ -158,26 +161,24 @@
         }).finally(() => this.loading_l=false);                                
       },
       remove_attack(){
+          this.darkModal = false;
           const path = 'http://3.14.19.238:8000/pentesting/attack_delete/'+this.attack_id_deleted;
           axios.delete(path).then(response => {    
-              //console.log(response);   
+              console.log(response);   
               this.errored_l =false;
               this.succed_l=true;
               this.success_l=[];
-              this.success_l.push({'message':'¡El attaque: '+this.attack_name_deleted+' ha sido eliminado correctamente!!!'}) 
+              this.success_l.push({'message':'¡El attaque: '+this.attack_name_deleted+' ha sido eliminado correctamente!!!'});
+              this.get_attacks();
           })
           .catch(error => {
+            console.log(error);  
             this.succed_l=false; 
             this.errored_l =true; 
             this.errors_l=[];
             this.errors_l.push({'message': '¡No se ha podido eliminar el ataque: '+this.attack_name_deleted+'!, intentelo más tarde.'});               
           })
           .finally(() => this.loading_l=false);            
-      },
-      delete_attack(){       
-        this.darkModal = false;        
-        this.remove_attack();          
-        this.get_attacks();        
       },
       /**
        * Editar ataque con id
@@ -219,9 +220,7 @@
 
 <style scoped>
 
-th, td {    
-    width: 250px;  
-}
+
 </style>
 
 
