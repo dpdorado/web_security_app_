@@ -4,7 +4,7 @@
       <CCardHeader class ="">        
         <div class="row">
           <div class="col-10">
-            <h1><CIcon name="cil-pencil"/> <small>Editar ataque </small></h1>            
+            <h1><CIcon name="cil-pencil"/> <small>Editar paquete de pruebas de penetración </small></h1>            
           </div>
           <div class="col">
             <button id="btnList" v-on:click="list_package()" class="btn btn-primary btn text-right"><CIcon name="cil-list"/></button>                                            

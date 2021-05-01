@@ -12,6 +12,10 @@ const Dashboard = () => import('@/views/Dashboard')
 const Home = () => import('@/views/Home')
 const ContactHome = () => import('@/views/contact/ContactHome')
 
+//Shopping cart 
+const ShoppingCartList = () => import('@/views/cart/ShoppingCartList')
+const ShoppingCartEmpty = () => import('@/views/cart/ShoppingCartEmpty')
+
 
 const Colors = () => import('@/views/theme/Colors')
 const Typography = () => import('@/views/theme/Typography')
@@ -116,6 +120,26 @@ function configRoutes () {
               path: 'contact',
               name: 'Contact',
               component: ContactHome
+            }
+          ]
+        },        
+        {
+          path: 'home',
+          redirect: '/home/shoppingcartlist',
+          name: 'ShoppingCart',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'shoppingcartlist',
+              name: 'ShoppingCartList',
+              component: ShoppingCartList
+            },
+            {
+              path: 'shoppingcartempty',
+              name: 'ShoppingCartEmpty',
+              component: ShoppingCartEmpty
             }
           ]
         }

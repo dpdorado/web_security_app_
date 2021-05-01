@@ -9,8 +9,8 @@
             </div>
             <div class="col-lg-5 pt-5">
                 <div class="hero-banner__content">
-                <h1>Advanced software made simple</h1>
-                <p>Vel aliquam quis, nulla pede mi commodo tristique nam hac Luctun torquent velit felis commodo pellentesque nulla cras vel aliqua quisan nulla pede mi commoda</p>
+                <h1>Web Security App</h1>
+                <p> Ofrecemos el mejor servicio de pruebas de penetración como servicio en la nube y contamos con la disponibilidad de las 95 pruebas de penetración según el OWASP.</p>                    
                 <a class="button bg" href="#">Get Started</a>
                 </div>
             </div>

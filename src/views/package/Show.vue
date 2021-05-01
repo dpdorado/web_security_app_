@@ -4,7 +4,7 @@
       <CCardHeader class ="">        
         <div class="row">
           <div class="col-10">
-            <h1><CIcon name="cil-pencil"/> <small>Editar ataque </small></h1>            
+            <h1><CIcon name="cil-pencil"/> <small>Lista de paquetes de pruebas de penetración </small></h1>            
           </div>
           <div class="col">
             <button id="btnList" v-on:click="list_package()" class="btn btn-primary btn text-right"><CIcon name="cil-list"/></button>                                            
@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                         <div class="card shadow-lg p-3 mb-5 bg-white border-0">
-                            <div class="card-header bg-dark text-white">Formulario de edición</div>                                
+                            <div class="card-header bg-dark text-white">Vista de paquete pruebas de penetración</div>                                
                                 <div class="card-body">
                                     <form >
                                        <section v-if="errored">

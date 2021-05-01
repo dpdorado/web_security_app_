@@ -7,6 +7,7 @@ import { iconsSet as icons } from './assets/icons/icons.js'
 import store from './store'
 import JwPagination from 'jw-vue-pagination';
 import * as VueGoogleMaps from "vue2-google-maps";
+//import VeeValidate from 'vee-validate';
 
 Vue.config.performance = true
 //Vue.config.productionTip = false
@@ -19,6 +20,7 @@ Vue.use(VueGoogleMaps, {
 Vue.use(CoreuiVue)
 Vue.prototype.$log = console.log.bind(console)
 Vue.component('jw-pagination', JwPagination);
+//Vue.use(VeeValidate);
 
 new Vue({
   el: '#app',

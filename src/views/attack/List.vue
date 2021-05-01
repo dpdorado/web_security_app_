@@ -2,18 +2,22 @@
   <div>     
     <CCard>      
       <CCardHeader>
-        <h1><CIcon name="cil-list"/> <small>Lista de ataques informáticos</small></h1>                            
+        <h1><CIcon name="cil-list"/> <small>Lista de pruebas de penetración</small></h1>                            
       </CCardHeader>
       
-      <CCardBody >        
+      <CCardBody>        
           <div class="container-fluid">
             <div class="row">
                 <div class="col-10">
                     <div class="demo">
                       <form class="form-search">
                         <div class="input-group">
-                          <input id="txtName" type="text" placeholder="Attack to search" class="form-control col-12 col-m-6 col-lg-8 mb-2 mr-sm-2 mb-sm-0" />                                         
-                          <button class="btn btn-primary"><CIcon name="cil-search"/></button>
+                          <div class="input-group">                        
+                            <input type="text" placeholder="Buscar prueba de penetración" class="form-control col-lg-9" v-model="name">                           
+                            <div class="input-group-append">
+                              <button  type="button" class="btn btn-primary"><CIcon name="cil-search"/></button>
+                            </div>                                                                              
+                          </div>
                         </div>
                       </form>
                     </div>                    
@@ -55,21 +59,27 @@
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>                    
                     <th scope="col">Id Owasp</th>
-                    <th scope="col">Precio ($)</th>                  
+                    <th scope="col">Precio</th>                  
                     <th scope="col">Opciones</th>                  
                     <!--<th colspan = 2>Opciones</th>-->
                   </tr>
                 </thead>
           
-                <tbody>                  
-                  <tr v-for="(attack,index) in pageOfItems" v-bind:key="attack.id">
+                <tbody>        
+                  <!--<tr v-if="count_attacks_search==0">                    
+                    <div class="alert alert-danger" role="alert">
+                      Ningún ataque coincide con su búsqueda.
+                    </div>    
+                  </tr>-->
+                  <tr v-for="(attack,index) in pageOfItems" v-bind:key="attack.id">                                         
                     <th scope="row">{{index+1}}</th>
                     <td>{{attack.name}}</td>
                     <td>{{attack.owas_id}}</td>                    
                     <td>$ {{attack.price}}</td>                    
                     <td  class="">
-                      <div class="btn-toolbar text-right">                        
-                        <button  v-on:click="show_attack(attack)" class="btn btn-success btn-sm mr-3"><CIcon name="cib-cassandra"/></button>                                            
+                      <div class="btn-toolbar text-right">                                            
+                        <i class="bi-eye" role="img" aria-label="Eye"></i>                                                   
+                        <button  v-on:click="show_attack(attack)" class="btn btn-success btn-sm mr-3"><CIcon name="cib-cassandra"/></button>
                         <button  v-on:click="edit_attack(attack)" class="btn btn-primary btn-sm mr-3"><CIcon name="cil-pencil"/></button>                                                                    
                         <button  v-on:click="darkModal = true, attack_name_deleted = attack.name,attack_id_deleted = attack.id" class="btn btn-danger  btn-sm"><CIcon name="cil-trash"/></button>                           
                       </div>                    
@@ -79,7 +89,7 @@
               </table>                                                         
           </CRow>    
            <div class="card-footer row justify-content-end">
-            <jw-pagination :items="attacks" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
+            <jw-pagination :items="search_attacks" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>               
                             
          <CModal
@@ -90,7 +100,7 @@
           size="lg"
           color="dark"
             >
-            Está seguro(a) de eliminar el ataque con de nombre: {{attack_name_deleted}}
+            Está seguro(a) de eliminar la prueba de penetración de nombre: {{attack_name_deleted}}
           <template #header>
             <h6 class="modal-title"><CIcon name="cil-trash"/> Eliminar ataque</h6>
             <CButtonClose @click="darkModal = false" class="text-white"/>
@@ -119,10 +129,11 @@
 
   export default {
     name: 'Attack_list', 
-    components: {   
+    components: {        
     },  
     data () {
-      return {       
+      return {
+        name : '',       
         errored_l: false,
         errors_l: [],
         succed_l: true,
@@ -133,15 +144,23 @@
         attack_id_deleted:-1,         
         pageOfItems: [],
         customLabels,
-        attacks:[]
+        attacks:[],      
+        count_attacks_search:0  
       }
     }, 
     filters: {      
     },
     computed:{
       ...Vuex.mapState('StoreAttack',['errored', 'errors', 'succed','success']),    
-      ...Vuex.mapGetters('StoreAttack', ['get_success'])
-    },
+      ...Vuex.mapGetters('StoreAttack', ['get_success']),
+      search_attacks: function () {       
+        if (this.name==''){
+          return this.attacks;
+        }else{                      
+          return this.attacks.filter((attack) => attack.name.includes(this.name));
+        }        
+      }
+    },    
     methods: {
       //...Vuex.mapActions('StoreAttack',['get_attacks', 'remove_attack','attack_aux','edit_loading']),
       ...Vuex.mapActions('StoreAttack',['edit_attacks','attack_aux']),
@@ -168,7 +187,7 @@
               this.errored_l =false;
               this.succed_l=true;
               this.success_l=[];
-              this.success_l.push({'message':'¡El attaque: '+this.attack_name_deleted+' ha sido eliminado correctamente!!!'});
+              this.success_l.push({'message':'¡La prueba de penetración: '+this.attack_name_deleted+' ha sido eliminada correctamente!!!'});
               this.get_attacks();
           })
           .catch(error => {
@@ -176,7 +195,7 @@
             this.succed_l=false; 
             this.errored_l =true; 
             this.errors_l=[];
-            this.errors_l.push({'message': '¡No se ha podido eliminar el ataque: '+this.attack_name_deleted+'!, intentelo más tarde.'});               
+            this.errors_l.push({'message': '¡No se ha podido eliminar la prueba de penetración: '+this.attack_name_deleted+'!, intentelo más tarde.'});               
           })
           .finally(() => this.loading_l=false);            
       },
@@ -203,23 +222,29 @@
           //this.$router.push('/attack/edit')
       },
       onChangePage(pageOfItems) {
-          // update page of items
-          this.pageOfItems = pageOfItems;
+        // update page of items
+        this.count_attacks_search = pageOfItems.length;
+        this.pageOfItems = pageOfItems;        
       },
       set_errors(){
         this.succed_l=this.succed;           
         this.success_l= this.succed_l?this.get_success:[];        
       }
     },
-    mounted() {    
+    mounted() {          
       this.set_errors();       
-      this.get_attacks();        
+      this.get_attacks();              
     }
   };  
 </script>
 
 <style scoped>
-
+  td {    
+    width: 300px;  
+  }
+  th{
+    width: 200px;
+  }
 
 </style>
 

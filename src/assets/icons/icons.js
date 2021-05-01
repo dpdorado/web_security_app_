@@ -83,9 +83,13 @@ import {
   cilSearch,
   cilPlus,
   cilCheckAlt,
-  cilX
-} from '@coreui/icons'
+  cilX,
+  cilHouse,
+  cilCart,
+  cilMinus,  
+  cilScreenSmartphone
 
+} from '@coreui/icons'
 
 import { logo } from './logo'
 
@@ -142,7 +146,11 @@ export const iconsSet = Object.assign(
     cilSearch,
     cilPlus,
     cilCheckAlt,
-    cilX
+    cilX,
+    cilHouse,
+    cilCart,
+    cilMinus,    
+    cilScreenSmartphone
   },
   {
     cifUs,
@@ -177,5 +185,5 @@ export const iconsSet = Object.assign(
     cibGooglePay,
     cibCcAmex,
     cibCassandra
-  },
+  }
 )

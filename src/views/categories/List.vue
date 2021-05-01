@@ -2,7 +2,7 @@
   <div>     
     <CCard>      
       <CCardHeader>
-        <h1><CIcon name="cil-list"/> <small>Lista de categorias de ataques informáticos</small></h1>                            
+        <h1><CIcon name="cil-list"/> <small>Lista de categorias de pruebas de penetración</small></h1>                            
       </CCardHeader>
       
       <CCardBody>        
@@ -11,9 +11,11 @@
                 <div class="col-10">
                     <div class="demo">
                       <form class="form-search">
-                        <div class="input-group">
-                          <input id="txtName" type="text" placeholder="Category to search" class="form-control col-12 col-m-6 col-lg-8 mb-2 mr-sm-2 mb-sm-0" />                                         
-                          <button class="btn btn-primary"><CIcon name="cil-search"/></button>
+                        <div class="input-group">                        
+                            <input type="text" placeholder="Buscar categoria" class="form-control col-lg-9" v-model="name">                           
+                            <div class="input-group-append">
+                              <button  type="button" class="btn btn-primary"><CIcon name="cil-search"/></button>
+                            </div>                                                                              
                         </div>
                       </form>
                     </div>                    
@@ -63,9 +65,8 @@
                                         <div class="form-row">                                    
                                             <div class="col-md-6 mb-3">                    
                                                 <label for="category_name" >Nombre:<span class="red">*</span></label>
-                                                <input  type="text" class="form-control" v-model="categor.category_name" id="category_name" name=category_name  placeholder="Category name" required >
-                                            </div>
-                                              
+                                                <input  type="text" class="form-control" v-model="categor.category_name" id="category_name" name=category_name  placeholder="Nombre de la categoria">
+                                            </div>                                              
                                         
                                             <div class="col mb-3">
                                                 <label for="state">Estado:<span class="red">*</span></label>                                     
@@ -80,7 +81,7 @@
                                        <div class="form-row ">
                                             <div class="col mb-3">
                                                 <label for="description">Descripción:<span class="red">*</span></label>
-                                                <textarea placeholder="Category description"  class="form-control overflow-auto" id="description" v-model="categor.description" name="description" rows="4" min="25" required></textarea>                    
+                                                <textarea placeholder="Descripción de la categoria"  class="form-control overflow-auto" id="description" v-model="categor.description" name="description" rows="4" min="25" required></textarea>                    
                                             </div>
                                         </div>
                                                                            
@@ -164,7 +165,7 @@
 
           </CRow>    
            <div class="card-footer row justify-content-end">
-            <jw-pagination :items="categories" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
+            <jw-pagination :items="search_categories" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>               
                              
          <CModal
@@ -226,6 +227,8 @@
             description: ''                            
         },
         create_category: false,
+        count_attacks_search:0,
+        name:''
         /*categories_prueba:[
           {
             id: 1,
@@ -253,7 +256,14 @@
     }, 
     filters: {      
     },
-    computed:{           
+    computed:{    
+      search_categories: function () {       
+        if (this.name==''){
+          return this.categories;
+        }else{                      
+          return this.categories.filter((category) => category.category_name.includes(this.name));          
+        }        
+      }       
     },
     methods: {
       //...Vuex.mapActions('StoreAttack',['get_attacks', 'remove_attack','attack_aux']),
@@ -359,6 +369,7 @@
       ,
       onChangePage(pageOfItems) {
           // update page of items
+          this.count_attacks_search = pageOfItems.length;
           this.pageOfItems = pageOfItems;
       },
       getBadge (state) {
@@ -382,6 +393,9 @@
     }
     td {    
       width: 300px;  
+    }
+    th{
+      width: 200px;
     }
 
 </style>

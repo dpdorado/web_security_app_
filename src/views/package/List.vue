@@ -2,7 +2,7 @@
   <div>     
     <CCard>      
       <CCardHeader>
-        <h1><CIcon name="cil-list"/> <small>Lista de paquetes</small></h1>                            
+        <h1><CIcon name="cil-list"/> <small>Lista de paquetes de pruebas de penetración</small></h1>                            
       </CCardHeader>
       
       <CCardBody>        
@@ -12,8 +12,12 @@
                     <div class="demo">
                       <form class="form-search">
                         <div class="input-group">
-                          <input id="txtName" type="text" placeholder="package to search" class="form-control col-12 col-m-6 col-lg-8 mb-2 mr-sm-2 mb-sm-0" />                                         
-                          <button class="btn btn-primary"><CIcon name="cil-search"/></button>
+                          <div class="input-group">                        
+                            <input type="text" placeholder="Buscar paquete" class="form-control col-lg-9" v-model="name">                           
+                            <div class="input-group-append">
+                              <button  type="button" class="btn btn-primary"><CIcon name="cil-search"/></button>
+                            </div>                                                                              
+                          </div>
                         </div>
                       </form>
                     </div>                    
@@ -75,7 +79,7 @@
                           <span class="badge badge-pill badge-danger">Inactivo</span>
                       </section>                                              
                     </td>
-                    <td>{{package_.price}}</td>
+                    <td>$ {{package_.price}}</td>
                     <td  class="">
                       <div class="btn-toolbar text-right">                        
                         <button  v-on:click="show_package(package_)" class="btn btn-success btn-sm mr-3"><CIcon name="cib-cassandra"/></button>                                            
@@ -88,7 +92,7 @@
               </table>                                                         
           </CRow>    
            <div class="card-footer row justify-content-end">
-            <jw-pagination :items="packages" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
+            <jw-pagination :items="search_packages" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>               
                             
          <CModal
@@ -142,14 +146,23 @@
         package_id_deleted:'',         
         pageOfItems: [],
         customLabels,
-        packages:[]
+        packages:[],
+        count_attacks_search:0,
+        name:''
       }
     }, 
     filters: {      
     },
     computed:{
       ...Vuex.mapState('StorePackage',['loading', 'errored', 'errors', 'succed','success']),    
-      ...Vuex.mapGetters('StorePackage', ['get_success']) 
+      ...Vuex.mapGetters('StorePackage', ['get_success']),
+      search_packages: function () {       
+        if (this.name==''){
+          return this.packages;
+        }else{                      
+          return this.packages.filter((package_) => package_.name.includes(this.name));          
+        }        
+      }
     },
     methods: {
       ...Vuex.mapActions('StorePackage',['package_aux']),
@@ -212,6 +225,7 @@
       },
       onChangePage(pageOfItems) {
           // update page of items
+          this.count_attacks_search = pageOfItems.length;
           this.pageOfItems = pageOfItems;
       },
       set_errors(){
@@ -227,6 +241,12 @@
 </script>
 
 <style scoped>
-
+  td {    
+    width: 300px;  
+  }
+  th{
+    width: 200px;
+  }
+  
 
 </style>

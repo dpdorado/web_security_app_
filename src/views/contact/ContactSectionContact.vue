@@ -1,5 +1,5 @@
 <template>       
-  <section class="section-margin">
+  <section id=sectioncontac class="section-margin">
     <div class="container">      
       <div class="row">
         <h1 style="text-align: center;">Ubicación de las oficinas de  Web Security App</h1>
@@ -11,15 +11,15 @@
       <div class="row">
         <div class="col-md-4 col-lg-3 mb-4 mb-md-0">
           <div class="media contact-info">
-            <span class="contact-info__icon"><i class="ti-home"></i></span>
-            <div class="media-body">
+            <span class="contact-info__icon"><i class="cil-house"></i></span>
+            <div class="media-body">              
               <h3>Colombia</h3>
               <p>Popayán - Cauca</p>
             </div>
           </div>
           <br>
           <div class="media contact-info">
-            <span class="contact-info__icon"><i class="ti-headphone"></i></span>
+            <span class="contact-info__icon"><i class="cil-screen-smartphone"></i></span>
             <div class="media-body">
               <h3><a href="Cel: 316 3270 921">316 3270 921</a></h3>
               <p>Barrio centro</p>
@@ -27,7 +27,7 @@
           </div>
           <br>
           <div class="media contact-info">
-            <span class="contact-info__icon"><i class="ti-email"></i></span>
+            <span class="contact-info__icon"><i class="cil-envelope-closed"></i></span>
             <div class="media-body">
               <h3><a href="mailto:web_security_app@gmail.com">web_security_app@gmail.com</a></h3>
               <p>¡Envíanos tu consulta en cualquier momento!</p>

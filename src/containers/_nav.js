@@ -6,7 +6,7 @@ export default [
         _name: 'CSidebarNavItem',
         name: 'Home',
         to: '/dashboard',
-        icon: 'cil-speedometer',
+        icon: 'cil-house',
         badge: {
           color: 'primary',
           text: 'NEW'
@@ -14,32 +14,24 @@ export default [
       },      
       {
         _name: 'CSidebarNavTitle',
-        _children: ['Package']
+        _children: ['Pentesting']
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Package List',
-        to: '/package/list',
+        name: 'Categorias de pruebas',
+        to: '/category/list',
         icon: 'cil-list',       
-      },  
-      {
-        _name: 'CSidebarNavTitle',
-        _children: ['Attack']
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Attack List',
+        name: 'Pruebas de penetración',
         to: '/attack/list',
         icon: 'cil-list',       
-      },      
-      {
-        _name: 'CSidebarNavTitle',
-        _children: ['Category']
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Category List',
-        to: '/category/list',
+        name: 'Paquetes de pruebas',
+        to: '/package/list',
         icon: 'cil-list',       
       },
       {

@@ -4,7 +4,7 @@
       <CCardHeader class ="">        
         <div class="row">
           <div class="col-10">
-            <h1><CIcon name="cil-pencil"/> <small>Editar ataque </small></h1>            
+            <h1><CIcon name="cil-pencil"/> <small>Editar prueba de penetración </small></h1>            
           </div>
           <div class="col">
             <button id="btnList" v-on:click="list_attack()" class="btn btn-primary btn text-right"><CIcon name="cil-list"/></button>                                            
@@ -181,7 +181,7 @@
           axios.put('http://3.14.19.238:8000/pentesting/attack_update/'+this.attack_o.id, this.attack_o)
           .then(response => {
               console.log(response)            
-              this.add_message_success({'message':'El ataque: '+this.attack_o.name+' ha sido actualizado correctamente.'});                  
+              this.add_message_success({'message':'La prueba de penetración: '+this.attack_o.name+' ha sido actualizada correctamente.'});                  
               this.$router.push('/attack/list');
           })
           .catch(error => {              
@@ -189,7 +189,7 @@
               this.succed=false;             
               this.errored = true;
               this.errors = [];
-              this.errors.push({'message':'No se ha podido actualizar el ataque, revise que el id owasd o el nombre no este repetidos.'})            
+              this.errors.push({'message':'No se ha podido actualizar la prueba de penetración, revise que el id owasd o el nombre no este repetidos.'})            
         })
         .finally(() => this.loading = false);                              
       },

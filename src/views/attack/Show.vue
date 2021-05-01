@@ -4,7 +4,7 @@
       <CCardHeader class ="">
         <div class="row">
           <div class="col-10">
-            <h1><CIcon name="cib-cassandra"/> <small>Vista de ataque </small></h1>    
+            <h1><CIcon name="cib-cassandra"/> <small>Vista de prueba de penetración </small></h1>    
           </div>
           <div class="col">
             <button id="btnList" v-on:click="list_attack()" class="btn btn-primary btn text-right"><CIcon name="cil-list"/></button>                                            

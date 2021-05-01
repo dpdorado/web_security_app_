@@ -1,18 +1,16 @@
 <template>
-  <CHeader fixed with-subheader light>
-    <!--<img class="c-sidebar-brand-minimized" src="@/assets/start/img/web_security_app.png" alt=""> -->
-    <!--<CToggler
+  <CHeader fixed with-subheader light>    
+    <CToggler
       in-header
       class="ml-3 d-lg-none"
       @click="$store.commit('toggleSidebarMobile')"
-    />-->
+    />
     <CToggler
       in-header
       class="ml-3 d-md-down-none"
       @click="$store.commit('toggleSidebarDesktop')"
     />
-
-    <!--<img class="mx-auto d-lg-none" src="@/assets/start/img/web_security_app.png" height="48" alt="Web Security App"/>-->
+    
     <CHeaderBrand class="mx-auto d-lg-none" to="/">      
       <img  src="@/assets/start/img/web_security_app_.png" width="160" height="40" alt="Web Security App"/>
     </CHeaderBrand>
@@ -44,10 +42,15 @@
         <CHeaderNavLink>
           <CIcon name="cil-list"/>
         </CHeaderNavLink>
-      </CHeaderNavItem>
+      </CHeaderNavItem>      
       <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
           <CIcon name="cil-envelope-open"/>
+        </CHeaderNavLink>
+      </CHeaderNavItem>
+       <CHeaderNavItem class="d-md-down-none mx-2">
+        <CHeaderNavLink>
+          <CIcon name="cil-cart"/>
         </CHeaderNavLink>
       </CHeaderNavItem>
       <TheHeaderDropdownAccnt/>

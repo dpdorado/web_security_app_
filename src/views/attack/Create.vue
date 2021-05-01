@@ -4,7 +4,7 @@
       <CCardHeader class ="">        
         <div class="row">
           <div class="col-10">
-            <h1><CIcon name="cil-plus"/> <small>Registrar ataque </small></h1>       
+            <h1><CIcon name="cil-plus"/> <small>Registrar prueba de penetración </small></h1>       
           </div>
           <div class="col">
             <button id="btnList" v-on:click="list_attack()" class="btn btn-primary btn text-right"><CIcon name="cil-list"/></button>                                            
@@ -33,7 +33,7 @@
                                         <div class="form-row">                                    
                                             <div class="col-md-6 mb-3">                    
                                                 <label for="name" >Nombre:<span class="red">*</span></label>
-                                                <input  type="text" class="form-control" v-model="attack.name" id="name" name=name  placeholder="Attack name" required >
+                                                <input  type="text" class="form-control" v-model="attack.name" id="name" name=name  placeholder="Nombre de la prueba" required >
                                             </div>
                                               
                                         
@@ -58,28 +58,28 @@
                                             
                                             <div class="col mb-3">
                                                 <label for="owas_id">Id Owasd:<span class="red">*</span></label>
-                                                <input placeholder="Id Owasd of the attack"  type="text" class="form-control" v-model="attack.owas_id" id="owas_id" name="owas_id" required>
+                                                <input placeholder="Id Owasd de la prueba"  type="text" class="form-control" v-model="attack.owas_id" id="owas_id" name="owas_id" required>
                                             </div>                                        
                                         </div>
 
                                         <div class="form-row">                                                                                                                                    
                                             <div class="col mb-3">
                                                 <label for="price">Precio ($):<span class="red">*</span></label>
-                                                <input placeholder="Price of the attack"  type="text" class="form-control" v-model="attack.price" id="price" name="price" required>
+                                                <input placeholder="Precio de la prueba"  type="text" class="form-control" v-model="attack.price" id="price" name="price" required>
                                             </div>                                        
                                         </div>
 
                                        <div class="form-row ">
                                             <div class="col mb-3">
                                                 <label for="description">Descripción:<span class="red">*</span></label>
-                                                <textarea placeholder="Attack description"  class="form-control overflow-auto" id="description" v-model="attack.description" name="description" rows="4" min="25" required></textarea>                    
+                                                <textarea placeholder="Descripción de la prueba"  class="form-control overflow-auto" id="description" v-model="attack.description" name="description" rows="4" min="25" required></textarea>                    
                                             </div>
                                         </div>
 
                                         <div class="form-row ">
                                             <div class="col mb-3">
                                                 <label for="script">Script:<span class="red">*</span></label>
-                                                <textarea placeholder="Script of the attack" class="form-control overflow-auto" id="script" v-model="attack.script" name="script" rows="10" min="25" required></textarea>             
+                                                <textarea placeholder="Script de la prueba" class="form-control overflow-auto" id="script" v-model="attack.script" name="script" rows="10" min="25" required></textarea>             
                                             </div>
                                         </div>      
 
@@ -151,7 +151,7 @@
             axios.post('http://3.14.19.238:8000/pentesting/attack_create/', this.attack)
             .then(response => {
                 console.log(response);  
-                this.add_message_success({'message':'El ataque: '+this.attack.name+' ha sido registrado correctamente.'});                  
+                this.add_message_success({'message':'La prueba de penetración: '+this.attack.name+' ha sido registrada correctamente.'});                  
                 this.$router.push('/attack/list');
             })
             .catch(error => {        
