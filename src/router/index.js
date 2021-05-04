@@ -16,6 +16,13 @@ const ContactHome = () => import('@/views/contact/ContactHome')
 const ShoppingCartList = () => import('@/views/cart/ShoppingCartList')
 const ShoppingCartEmpty = () => import('@/views/cart/ShoppingCartEmpty')
 
+//Bills
+const Bill = () => import('@/views/bill/Bill')
+
+//Services
+const Attacks_Client = () => import('@/views/attack/AttacksClient')
+const Packages_Client = () => import('@/views/package/PackagesClient')
+
 
 const Colors = () => import('@/views/theme/Colors')
 const Typography = () => import('@/views/theme/Typography')
@@ -125,6 +132,26 @@ function configRoutes () {
         },        
         {
           path: 'home',
+          redirect: '/home/services/attacks',
+          name: 'ShoppingCart',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'services/attacks',
+              name: 'Attacks_',
+              component: Attacks_Client
+            },
+            {
+              path: 'services/packages',
+              name: 'Packages_',
+              component: Packages_Client
+            }
+          ]
+        },               
+        {
+          path: 'home',
           redirect: '/home/shoppingcartlist',
           name: 'ShoppingCart',
           component: {
@@ -140,6 +167,21 @@ function configRoutes () {
               path: 'shoppingcartempty',
               name: 'ShoppingCartEmpty',
               component: ShoppingCartEmpty
+            }
+          ]
+        },        
+        {
+          path: 'home',
+          redirect: '/home/bill',
+          name: 'Bill_',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'bill',
+              name: 'Bill',
+              component: Bill
             }
           ]
         }

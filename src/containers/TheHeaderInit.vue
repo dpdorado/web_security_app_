@@ -15,7 +15,20 @@
           <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
             <ul class="nav navbar-nav menu_nav justify-content-end">
               <li class="nav-item active"><router-link class="nav-link" v-bind:to="'/home'">Home</router-link></li>               
-              <li class="nav-item"><a class="nav-link" href="feature.html">Feature</a></li> 
+              <li class="nav-item submenu dropdown">
+                <router-link class="nav-link dropdown-toggle" 
+                  data-toggle="dropdown" 
+                  role="button" 
+                  aria-haspopup="true" 
+                  aria-expanded="false" 
+                  v-bind:to="'/home/services/attacks'">
+                  Servicios
+                </router-link>                
+                <ul class="dropdown-menu">
+                  <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/services/attacks'">Pruebas</router-link></li>
+                  <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/services/packages'">Paquetes</router-link></li>
+                </ul>
+							</li>
               <li class="nav-item"><a class="nav-link" href="pricing.html">Price</a>
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
