@@ -60,10 +60,10 @@
               Copyright &copy; 2021 Todos los derechos reservados | Esta aplicación fue desarrollada por DD
           </p>
           <div class="col-lg-4 col-md-12 text-center text-lg-right footer-social">
-            <a href="#"><i class="cib-facebook"/></a>
-            <a href="#"><i class="cib-twitter"/></a>
-            <a href="#"><i class="cib-dribbble"/></a>
-            <a href="#"><i class="cib-behance"/></a>                        
+            <a href="#"><em class="cib-facebook"/></a>
+            <a href="#"><em class="cib-twitter"/></a>
+            <a href="#"><em class="cib-dribbble"/></a>
+            <a href="#"><em class="cib-behance"/></a>                        
           </div>
         </div>
       </div>    

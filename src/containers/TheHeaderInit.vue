@@ -40,8 +40,8 @@
 							</li>
               <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/contact'">Contacto</router-link></li>
               <li class="nav-item">
-                  <button v-on:click="sign_in()" class="button boton_1 button-header bg mr-1"><i class="cil-user"/> Mi cuenta</button> 
-                  <button v-on:click="shopping_cart()" class="button boton_1 button-header bg"><i class="cil-cart"/> Mi carrito</button> 
+                  <button v-on:click="sign_in()" class="button boton_1 button-header bg mr-1"><em class="cil-user"/> Mi cuenta</button> 
+                  <button v-on:click="shopping_cart()" class="button boton_1 button-header bg"><em class="cil-cart"/> Mi carrito</button> 
               </li>                    
             </ul>
           </div>          
@@ -126,7 +126,7 @@ export default {
       this.$router.push('/pages/login')
     },
     shopping_cart(){
-      this.$router.push('/home/shoppingcartempty')
+      this.$router.push('/home/shoppingcart')
     }
   }
 }

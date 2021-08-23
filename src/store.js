@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import StoreAttack from './stores/StoreAttack'
 import StorePackage from './stores/StorePackage'
+import StorePackageClient from './stores/StorePackageClient'
 
 Vue.use(Vuex)
 
@@ -28,7 +29,8 @@ const mutations = {
 
 const modules = {
   StoreAttack,
-  StorePackage
+  StorePackage,
+  StorePackageClient
 }
 
 export default new Vuex.Store({

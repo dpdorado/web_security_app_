@@ -13,6 +13,7 @@ const Home = () => import('@/views/Home')
 const ContactHome = () => import('@/views/contact/ContactHome')
 
 //Shopping cart 
+const ShoppingCart = () => import('@/views/cart/ShoppingCart')
 const ShoppingCartList = () => import('@/views/cart/ShoppingCartList')
 const ShoppingCartEmpty = () => import('@/views/cart/ShoppingCartEmpty')
 
@@ -20,8 +21,8 @@ const ShoppingCartEmpty = () => import('@/views/cart/ShoppingCartEmpty')
 const Bill = () => import('@/views/bill/Bill')
 
 //Services
-const Attacks_Client = () => import('@/views/attack/AttacksClient')
-const Packages_Client = () => import('@/views/package/PackagesClient')
+const Attacks_Client = () => import('@/views/services/AttacksClient')
+const Packages_Client = () => import('@/views/services/PackagesClient')
 
 
 const Colors = () => import('@/views/theme/Colors')
@@ -158,6 +159,11 @@ function configRoutes () {
             render (c) { return c('router-view') }
           },
           children: [
+            {
+              path: 'shoppingcart',
+              name: 'ShoppingCart',
+              component: ShoppingCart
+            },
             {
               path: 'shoppingcartlist',
               name: 'ShoppingCartList',

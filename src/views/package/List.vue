@@ -51,18 +51,16 @@
         </div>
 
           <CRow>               
-            <div  class="table-responsive"></div>
+            <div  class="table-responsive"></div>              
               <table class="table table-striped">
                 <thead class="thead-dark">
                   <tr >
                     <th scope="col">#</th>
                     <th scope="col">Nombre</th>                    
-                    <!--<th scope="col">Descripción</th>                  -->
                     <th scope="col">Ataques</th>                  
                     <th scope="col">Estado</th>
                     <th scope="col">Precio</th>
-                    <th >Opciones</th>
-                    <!--<th colspan = 2>Opciones</th>-->
+                    <th scope="col">Opciones</th>
                   </tr>
                 </thead>
           

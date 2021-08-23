@@ -1,21 +1,20 @@
 <template>
   <div>
     <CCard>      
-      <CCardHeader class ="">        
+        <CCardHeader class ="">        
         <div class="row">
-          <div class="col-10">
+            <div class="col-10">
             <h1><CIcon name="cil-pencil"/> <small>Lista de paquetes de pruebas de penetración </small></h1>            
-          </div>
-          <div class="col">
+            </div>
+            <div class="col">
             <button id="btnList" v-on:click="list_package()" class="btn btn-primary btn text-right"><CIcon name="cil-list"/></button>                                            
-          </div>            
+            </div>            
         </div>                  
-      </CCardHeader>
+    </CCardHeader>
       
 
       <CCardBody>      
-          <div>          
-                <!--<div style="height: 30px;"></div>-->
+        <div>                
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
@@ -99,7 +98,6 @@
 </template>>
 
 <script>
-  //import axios from "axios";
   import Vuex from 'vuex';
 
 
