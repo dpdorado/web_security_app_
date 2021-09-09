@@ -1,6 +1,6 @@
 module.exports = {
   devServer: { disableHostCheck: true },
-  devServer: { host: 'http://3.14.19.238' },
+  devServer: { host:'3.14.19.238'},
   lintOnSave: false,
   runtimeCompiler: true,
   configureWebpack: {
