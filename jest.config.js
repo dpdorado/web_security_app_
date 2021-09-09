@@ -21,7 +21,7 @@ module.exports = {
   ],
   testMatch: ['<rootDir>/tests/unit/**/*.spec.js'],
   verbose: true,
-  testURL: 'http://localhost/',
+  testURL: 'http://3.14.19.238',
   collectCoverage: true,
   collectCoverageFrom: [
       'src/**/*.{js,vue}',
