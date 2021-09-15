@@ -49,19 +49,19 @@
           <br>
           
           <div class="row">
-            <div class="col-md-3 col-lg-3 mb-3 mb-lg-0" v-for="(package_) in pageOfItems" v-bind:key="package_.id">              
+            <div class="col-md-3 col-lg-3 mb-3 mb-lg-0" v-for="(package_) in pageOfItems" v-bind:key="package_.id">
               <div class="card text-center card-pricing border">
-                <div class="card-pricing__header">
+                <div class="card-pricing__header" v-on:click="viewPackage(package_.id)">
                   <h4>{{package_.name}}</h4>
                   <p>{{package_.description}}</p>                  
                   <h1 class="card-pricing__price"><span>$</span>{{package_.price}}</h1>
                 </div>
 
                 <ul class="card-pricing__list">                                      
-                    <div  v-for="(attack_,index) in package_.attacks" v-bind:key="index" >                      
-                      <li><em class="ti-check">{{'1. ' + attack_}}</em></li> 
+                    <div  v-for="(attack_,index) in package_.attacks" v-bind:key="index" >
+                      <li><em class="ti-check">{{index+1}}. {{attack_.name}}</em></li> 
                     </div>                    
-                </ul>               
+                </ul>                
                 
                 <div class="card-pricing__footer">
                   <button v-on:click="addToCart(package_.service_id,package_.name)" class="button button-light"><em class="cil-cart"/> Añadir al carrito</button> 
@@ -105,7 +105,7 @@ export default {
       darkModal: false,
       pageOfItems: [],
       customLabels,
-      packages: [],
+      packages: [],    
       count_attacks_search: 0,
       name: "",    
       attacks_aux: {},
@@ -150,7 +150,8 @@ export default {
               "¡El servicio: " +
               name +
               " ha sido agregado al carrito!!!",
-          });          
+          });  
+          window.scrollTo(0, 0);        
       }).catch(error => {            
           console.log('¡Ocurrio un error!');
           console.log(error);
@@ -161,40 +162,43 @@ export default {
               message:
               "¡Ha ocurrido un error el servicio: "+ name + "al carrito, revise si no se ha agregado antes!!!",
           });
+          window.scrollTo(0, 0);
       }).finally(() => this.loading_l=false)                 
     },  
     get_packages(){
       const path = 'http://3.14.19.238:8000/pentesting/package_list/'                
       axios.get(path).then(response => { 
           console.log(response);       
-          this.packages = response.data;          
+          this.packages = response.data; 
+          //this.get_attacks();         
       }).catch(error => {
           console.log(error);  
           this.succed_l=false; 
           this.errored_l =true; 
           this.errors_l=[];
           this.errors_l.push({'message':'¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!'});                
+          window.scrollTo(0, 0);
       }).finally(() => this.loading_l=false);                                
     },
-    get_attacks(attacks){      
-      const path = 'http://3.14.19.238:8000/pentesting/attack_search/';
-      let promises = [];
-      for (let i = 0; i < attacks.length; i++) {
-        promises.push(
-          axios.get(path+attacks[i]).then(response => {
-              this.attacks_aux.push(response.data['Attack'][0]);  
-              console.log('ssss: '+ this.attacks_aux);
-          }).catch(error => {         
-              this.succed_l=false; 
-              this.errored_l =true; 
-              this.errors_l=[];
-              this.errors_l.push({'message':'¡Ocurrio un error al cargar algúna pruab de penetración!!!'});                
-          }).finally(() => this.loading_l=false)
-        );
-      }
-      Promise.all(promises);      
-      console.log('asdadas');
-      console.log(this.attacks_aux);
+    get_attacks(){  
+      //TODO: quitar         
+      const path = 'http://3.14.19.238:8000/pentesting/attack_search/';        
+      for (let i = 0; i < this.packages.length; i++) {                
+        let attacks = this.packages[i].attacks;        
+        for (let j = 0; j < attacks.length; j++) {          
+          axios.get(path+attacks[j]).then(response => {
+              this.packages[i].attacks[j] = {
+                'id' : response.data.Attack[0].id,
+                'name' : response.data.Attack[0].name
+              };              
+          }).catch(error => {  
+            console.log(error);
+          }).finally(() => this.loading_l=false);
+        }      
+      }      
+    },
+    viewPackage(package_id){
+       this.$router.push({ path: '/home/services/packages/'+package_id})
     },
     onChangePage(pageOfItems) {
         // update page of items

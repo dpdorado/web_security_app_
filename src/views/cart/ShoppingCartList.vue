@@ -139,10 +139,9 @@ export default {
             //TODO vaciar el carrito
         },
         pay_method(){
-            //TODO ir al métod de pago
+           this.$router.push('/home/billingaddress');
         },
-        get_shopping_info(){
-            console.log('entrando:    dsdcsd');
+        get_shopping_info(){            
             const path = 'http://3.14.19.238:8000/shopping/shoppingCartList/';                            
             axios.get(path).then(response => {                
                 this.shoppingCartInfo = response.data.shopping;  

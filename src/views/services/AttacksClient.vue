@@ -145,7 +145,8 @@ export default {
               "¡El servicio: " +
               name +
               " ha sido agregado al carrito!!!",
-          });          
+          });  
+          window.scrollTo(0, 0);        
       }).catch(error => {            
           console.log('¡Ocurrio un error!');
           console.log(error);
@@ -156,6 +157,7 @@ export default {
               message:
               "¡Ha ocurrido un error el servicio: "+ name + "al carrito, revise si no se ha agregado antes!!!",
           });
+          window.scrollTo(0, 0);
       }).finally(() => this.loading_l=false)             
     },  
     get_attacks(){
@@ -169,6 +171,7 @@ export default {
           this.errored_l =true; 
           this.errors_l=[];
           this.errors_l.push({'message':'¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!'});                
+          window.scrollTo(0, 0);
       }).finally(() => this.loading_l=false);                                
     },
     onChangePage(pageOfItems) {

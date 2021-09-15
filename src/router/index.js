@@ -18,11 +18,16 @@ const ShoppingCartList = () => import('@/views/cart/ShoppingCartList')
 const ShoppingCartEmpty = () => import('@/views/cart/ShoppingCartEmpty')
 
 //Bills
+const Bill_list = () => import('@/views/bill/List')
 const Bill = () => import('@/views/bill/Bill')
+const BillingAddress = () => import('@/views/checkout/BillingAddress')
+const ConfirmationOrder = () => import('@/views/checkout/ConfirmationOrder')
 
 //Services
 const Attacks_Client = () => import('@/views/services/AttacksClient')
 const Packages_Client = () => import('@/views/services/PackagesClient')
+
+const ViewPackage = () => import('@/views/services/ViewPackage')
 
 
 const Colors = () => import('@/views/theme/Colors')
@@ -148,6 +153,11 @@ function configRoutes () {
               path: 'services/packages',
               name: 'Packages_',
               component: Packages_Client
+            },
+            {
+              path: 'services/packages/:id',
+              name: 'ViewPackage',
+              component: ViewPackage
             }
           ]
         },               
@@ -173,22 +183,17 @@ function configRoutes () {
               path: 'shoppingcartempty',
               name: 'ShoppingCartEmpty',
               component: ShoppingCartEmpty
-            }
-          ]
-        },        
-        {
-          path: 'home',
-          redirect: '/home/bill',
-          name: 'Bill_',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
+            },
             {
-              path: 'bill',
-              name: 'Bill',
-              component: Bill
-            }
+              path: 'billingaddress',
+              name: 'BillingAddress',
+              component: BillingAddress
+            },
+            {
+              path: 'orderconfirmation',
+              name: 'ConfirmationOrder',
+              component: ConfirmationOrder
+            }                        
           ]
         }
       ]
@@ -312,6 +317,26 @@ function configRoutes () {
               name: 'Show',
               component: Attack_show
             }*/
+          ]
+        },                
+        {
+          path: 'bill',
+          redirect: '/bill/list',
+          name: 'Bill_',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'list',
+              name: 'Bill List',
+              component: Bill_list
+            },
+            {
+              path: 'show',
+              name: 'Bill',
+              component: Bill
+            }
           ]
         },
         {
