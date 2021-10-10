@@ -70,31 +70,23 @@
             </thead>
 
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>00000000012</td>
-                <td>Miguel Calambas</td>
-                <td>Completada</td>
+              <tr  v-for="(bill, index) in pageOfItems" v-bind:key="bill.id">                
+                <th scope="row">{{index}}</th>
+                <td>{{bill.id}}</td>
+                <td>{{bill.representante}}</td>
+                <td>{{bill.estado}}</td>
                 <td class="">
-                  <div class="btn-toolbar text-right">
-                    <i class="bi-eye" role="img" aria-label="Eye"></i>
+                  <div class="btn-toolbar text-right">                   
+                    <em class="bi-eye" role="img" aria-label="Eye"></em>
                     <button
-                      v-on:click="show_order()"
+                      v-on:click="show_bill(bill)"
                       class="btn btn-success btn-sm mr-3"
-                    >
-                      <CIcon name="cib-cassandra" />
-                    </button>
-                    <button
-                      v-on:click="edit_attack(attack)"
-                      class="btn btn-primary btn-sm mr-3"
-                    >
-                      <CIcon name="cil-pencil" />
-                    </button>
+                    />
                     <button
                       v-on:click="
                         (darkModal = true),
-                          (attack_name_deleted = attack.name),
-                          (attack_id_deleted = attack.id)
+                          (bill_name_deleted = bill.name),
+                          (bill_id_deleted = bill.id)
                       "
                       class="btn btn-danger btn-sm"
                     >
@@ -102,46 +94,13 @@
                     </button>
                   </div>
                 </td>
-              </tr>
-               <tr>
-                <th scope="row">2</th>
-                <td>00000000013</td>
-                <td>Daniel Dorado</td>
-                <td>Pendiente</td>
-                <td class="">
-                  <div class="btn-toolbar text-right">
-                    <i class="bi-eye" role="img" aria-label="Eye"></i>
-                    <button
-                      v-on:click="show_order()"
-                      class="btn btn-success btn-sm mr-3"
-                    >
-                      <CIcon name="cib-cassandra" />
-                    </button>
-                    <button
-                      v-on:click="edit_attack(attack)"
-                      class="btn btn-primary btn-sm mr-3"
-                    >
-                      <CIcon name="cil-pencil" />
-                    </button>
-                    <button
-                      v-on:click="
-                        (darkModal = true),
-                          (attack_name_deleted = attack.name),
-                          (attack_id_deleted = attack.id)
-                      "
-                      class="btn btn-danger btn-sm"
-                    >
-                      <CIcon name="cil-trash" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              </tr>              
             </tbody>
           </table>
         </CRow>
         <div class="card-footer row justify-content-end">
           <jw-pagination
-            :items="search_attacks"
+            :items="search_bills"
             @changePage="onChangePage"
             :labels="customLabels"
           ></jw-pagination>
@@ -156,7 +115,7 @@
           color="dark"
         >
           Está seguro(a) de eliminar la prueba de penetración de nombre:
-          {{ attack_name_deleted }}
+          {{ bill_name_deleted }}
           <template #header>
             <h6 class="modal-title">
               <CIcon name="cil-trash" /> Eliminar ataque
@@ -167,7 +126,7 @@
             <CButton @click="darkModal = false" color="danger"
               >Cancelar</CButton
             >
-            <CButton v-on:click="remove_attack()" color="success"
+            <CButton v-on:click="remove_bill()" color="success"
               >Eliminar</CButton
             >
           </template>
@@ -200,56 +159,142 @@ export default {
       success_l: [],
       loading_l: false,
       darkModal: false,
-      attack_name_deleted: "",
-      attack_id_deleted: -1,
+      bill_name_deleted: "",
+      bill_id_deleted: -1,
       pageOfItems: [],
       customLabels,
-      attacks: [],
-      count_attacks_search: 0,
+      bills: [],
+      users:[],
+      user_names:[],
+      dates_table: [],
+      count_bills_search: 0,
     };
   },
   filters: {},
   computed: {
-    // ...Vuex.mapState("StoreAttack", ["errored", "errors", "succed", "success"]),
-    // ...Vuex.mapGetters("StoreAttack", ["get_success"]),
-    search_attacks: function () {
+    // ...Vuex.mapState("Storebill", ["errored", "errors", "succed", "success"]),
+    // ...Vuex.mapGetters("Storebill", ["get_success"]),
+    search_bills: function () {
       if (this.name == "") {
-        return this.attacks;
+        return this.dates_table;
       } else {
-        return this.attacks.filter((attack) => attack.name.includes(this.name));
+        return this.dates_table.filter((bill) => bill.id.includes(this.name));
       }
     },
   },
   methods: {
-    //...Vuex.mapActions('StoreAttack',['get_attacks', 'remove_attack','attack_aux','edit_loading']),
-    // ...Vuex.mapActions("StoreAttack", ["edit_attacks", "attack_aux"]),
+    //...Vuex.mapActions('Storebill',['get_bills', 'remove_bill','bill_aux','edit_loading']),
+    // ...Vuex.mapActions("Storebill", ["edit_bills", "bill_aux"]),
 
-    get_attacks() {
-    //   const path = "http://3.14.19.238:8000/pentesting/attack_list/";
-    //   axios
-    //     .get(path)
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.attacks = response.data;
-    //       this.edit_attacks(this.attacks);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //       this.succed_l = false;
-    //       this.errored_l = true;
-    //       this.errors_l = [];
-    //       this.errors_l.push({
-    //         message:
-    //           "¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!",
-    //       });
-    //     })
-    //     .finally(() => (this.loading_l = false));
+    get_bills() {
+      const path = "http://3.14.19.238:8000/shopping/InvoceList/";
+      axios
+        .get(path)
+        .then((response) => {                    
+          this.bills = response.data;
+          for (var i = 0; i < this.bills.length;i++)
+          {
+            this.dates_table.push({
+              id: this.bills[i].id,
+              representante: '',
+              estado: 'Completed',
+              user_id:''
+            });
+          }   
+          //this.get_users();         
+          //this.get_all_users();        
+        })
+        .catch((error) => {
+          console.log(error)
+          this.succed_l = false;
+          this.errored_l = true;
+          this.errors_l = [];
+          this.errors_l.push({
+            message:
+              "¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!",
+          });
+        })
+        .finally(() => (this.loading_l = false));
     },
-    remove_attack() {
+    getUserDefault(){
+      const path = "http://3.14.19.238:8000/usuario/usuario/1";                              
+        axios
+          .get(path)
+          .then((response) => {                    
+            console.log(response.data.name);
+              var name = response.data.name;
+             for (var k = 0; k < this.dates_table.length;k++){
+               this.dates_table[k].representante = name;
+             }         
+          })
+          .catch((error) => {
+            console.log(error)
+            this.succed_l = false;
+            this.errored_l = true;
+            this.errors_l = [];
+            this.errors_l.push({
+              message:
+                "¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!",
+            });
+          })
+          .finally(() => (this.loading_l = false));        
+    },
+    get_users(){    
+      const path = "http://3.14.19.238:8000/shopping/InvoceDetail/";      
+      
+      for (var k = 0; k < this.dates_table.length;k++){
+        var path_aux = path + this.dates_table[k].id;        
+        axios
+          .get(path_aux)
+          .then((response) => {                   
+            var user = response.data['invoceDetail '][0].user;            
+            this.users.push(user);                      
+          })
+          .catch((error) => {
+            console.log(error)
+            this.succed_l = false;
+            this.errored_l = true;
+            this.errors_l = [];
+            this.errors_l.push({
+              message:
+                "¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!",
+            });
+          })
+          .finally(() => (this.loading_l = false));
+        }
+    },
+    get_all_users(){    
+      const path = "http://3.14.19.238:8000/usuario/usuario/";  
+      console.log('sadas')        ;
+      console.log(this.users)        ;
+      for (var j = 0; j < this.dates_table.length;j++){
+        var path_aux = path + this.users[j];  
+        console.log(path_aux);
+        axios
+          .get(path_aux)
+          .then((response) => {                    
+            console.log(response.data);          
+            //this.dates_table[j].user_id = response.data;            
+          })
+          .catch((error) => {
+            console.log(error)
+            this.succed_l = false;
+            this.errored_l = true;
+            this.errors_l = [];
+            this.errors_l.push({
+              message:
+                "¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!",
+            });
+          })
+          .finally(() => (this.loading_l = false));
+        }
+    }
+    ,
+    remove_bill() {
     //   this.darkModal = false;
     //   const path =
-    //     "http://3.14.19.238:8000/pentesting/attack_delete/" +
-    //     this.attack_id_deleted;
+    //     "http://3.14.19.238:8000/pentesting/bill_delete/" +
+    //     this.bill_id_deleted;
     //   axios
     //     .delete(path)
     //     .then((response) => {
@@ -260,10 +305,10 @@ export default {
     //       this.success_l.push({
     //         message:
     //           "¡La prueba de penetración: " +
-    //           this.attack_name_deleted +
+    //           this.bill_name_deleted +
     //           " ha sido eliminada correctamente!!!",
     //       });
-    //       this.get_attacks();
+    //       this.get_bills();
     //     })
     //     .catch((error) => {
     //       console.log(error);
@@ -273,7 +318,7 @@ export default {
     //       this.errors_l.push({
     //         message:
     //           "¡No se ha podido eliminar la prueba de penetración: " +
-    //           this.attack_name_deleted +
+    //           this.bill_name_deleted +
     //           "!, intentelo más tarde.",
     //       });
     //     })
@@ -282,28 +327,28 @@ export default {
     /**
      * Editar ataque con id
      */
-    edit_attack(attack) {
-      this.attack_aux(attack);
-      this.$router.push({ path: "/attack/edit/" + attack.id });
+    edit_bill(bill) {
+      this.bill_aux(bill);
+      this.$router.push({ path: "/bill/edit/" + bill.id });
     },
     /**
      * Mostrar un ataque ataque con id
      */
-    show_attack(attack) {
-      this.attack_aux(attack);
-      this.$router.push({ path: "/attack/show/" + attack.id });
-      //this.$router.push('/attack/edit')
+    show_bill(bill) {      
+      console.log(bill.id);
+      this.$router.push("/bill/show/" + bill.id );
+      //this.$router.push('/bill/edit')
     },
     /**
      * Editar ataque con id
      */
-    create_attack() {
-      this.$router.push("/attack/create");
-      //this.$router.push('/attack/edit')
+    create_bill() {
+      this.$router.push("/bill/create");
+      //this.$router.push('/bill/edit')
     },
     onChangePage(pageOfItems) {
       // update page of items
-      this.count_attacks_search = pageOfItems.length;
+      this.count_bills_search = pageOfItems.length;
       this.pageOfItems = pageOfItems;
     },
     set_errors() {
@@ -316,7 +361,8 @@ export default {
   },
   mounted() {
     // this.set_errors();
-    // this.get_attacks();
+    this.get_bills();    
+    this.getUserDefault();
   },
 };
 </script>

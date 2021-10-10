@@ -16,7 +16,7 @@
 
             <div class="col text-right">
               <h2>FACTURA</h2>
-              <h3><small>Factura #001</small></h3>
+              <h3><small>Factura #00{{this.bill_id}}</small></h3>
             </div>
           </div>
 
@@ -27,16 +27,16 @@
               <div class="card">
                 <div class="card-header background">
                   <div class="row">
-                    <div class="col-md-2 font-weight-bold">De :</div>
+                    <div class="col-md-2 font-weight-bold">De:</div>
                     <div class="col-md-10 font-weight-bold text-primary">
                       Web Security App
                     </div>
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="card-text">Dirrección:</div>
-                  <div class="card-text">Detalles:</div>
-                  <div class="card-text">Más detalles:</div>
+                  <div class="card-text">Dirrección: Popayán Cauca</div>
+                  <div class="card-text">Detalles: web security app</div>
+                  <div class="card-text">Más detalles: web security app</div>
                 </div>
               </div>
             </div>
@@ -55,9 +55,9 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="card-text">Dirrección:</div>
-                  <div class="card-text">Detalles:</div>
-                  <div class="card-text">Más detalles:</div>
+                  <div class="card-text">Dirrección: Popayán Cauca</div>
+                  <div class="card-text">Detalles: ---</div>
+                  <div class="card-text">Más detalles: --- </div>
                 </div>
               </div>
             </div>
@@ -86,27 +86,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Artículo</td>
-                  <td><a href="#"> Título de su artículo aquí </a></td>
-                  <td class="text-right">-</td>
-                  <td class="text-right">200.00 €</td>
-                  <td class="text-right">200.00 €</td>
-                </tr>
-                <tr>
-                  <td>Plantilla de diseño</td>
-                  <td><a href="#"> Detalles del proyecto aquí </a></td>
-                  <td class="text-right">10</td>
-                  <td class="text-right">75.00 €</td>
-                  <td class="text-right">750.00 €</td>
-                </tr>
-                <tr>
-                  <td>Desarrollo</td>
-                  <td><a href="#"> Plugin WordPress </a></td>
-                  <td class="text-right">5</td>
-                  <td class="text-right">50.00 €</td>
-                  <td class="text-right">250.00 €</td>
-                </tr>
+                <tr v-for="(detail, index) in this.details" v-bind:key="index">
+                  <td>{{detail.service}}</td>
+                  <td><a href="#"> {{detail.service}} </a></td>
+                  <td class="text-right">1</td>
+                  <td class="text-right">${{detail.price}}</td>
+                  <td class="text-right">${{detail.price}}</td>
+                </tr>                
                 <tr></tr>
                 <tr class="border-hidden">
                   <td class="border-hidden"></td>
@@ -116,7 +102,7 @@
                     Sub Total:
                   </td>
                   <td class="text-right font-weight-bold border-hidden">
-                    1,200.00 €
+                    $ {{this.total}}
                   </td>
                 </tr>
                 <tr class="border-hidden">
@@ -127,7 +113,7 @@
                     Impuestos (IVA 21%):
                   </td>
                   <td class="text-right font-weight-bold border-hidden">
-                    252.00 €
+                    $ 0
                   </td>
                 </tr>
                 <tr class="border-hidden">
@@ -138,7 +124,7 @@
                     Total:
                   </td>
                   <td class="text-right font-weight-bold border-hidden">
-                    1,452.00 €
+                    $ {{this.total}}
                   </td>
                 </tr>
               </tbody>
@@ -154,7 +140,7 @@
                   <div class="font-weight-bold">Datos bancarios</div>
                 </div>
                 <div class="card-body">
-                  <div class="card-text">Su nombre</div>
+                  <div class="card-text">{{this.user.name}}</div>
                   <div class="card-text">Nombre del banco:</div>
                   <div class="card-text">SWIFT: -----</div>
                   <div class="card-text">Número de cuenta: ------</div>
@@ -168,7 +154,7 @@
                   <div class="font-weight-bold">Datos de contacto</div>
                 </div>
                 <div class="card-body">
-                  <div class="card-text">Email: usted@ejemplo.com</div>
+                  <div class="card-text">Email: {{this.user.email}}</div>
                   <div class="card-text">Móvil: +92123456789</div>
                   <div class="card-text">
                     Twitter:
@@ -216,28 +202,53 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Bill",
+   data() {
+    return {
+      bill_id: '',
+      user : {},
+      details:[],
+      total:0
+    };
+  },
+  
   methods: {
-    color_nav() {
-      if (
-        document.body.scrollTop > 100 ||
-        document.documentElement.scrollTop > 100
-      ) {
-        document.getElementById("navbar").style.backgroundColor = "#22195b";
-      } else {
-        document.getElementById("navbar").style.backgroundColor = "#22195b";
-      }
+    getUserDefault(){
+      const path = "http://3.14.19.238:8000/usuario/usuario/1";                              
+        axios
+          .get(path)
+          .then((response) => {                    
+            
+            this.user = response.data;             
+          })
+          .catch((error) => {
+            console.log(error)            
+          })
+          .finally(() => (this.loading_l = false));        
     },
+    get_details(){    
+      console.log('details');
+      const path = "http://3.14.19.238:8000/shopping/InvoceDetail/"+this.bill_id;                       
+        axios
+          .get(path)
+          .then((response) => {                   
+            this.details = response.data['invoceDetail '];           
+            for (var i = 0; i < this.details.length; i++){
+              this.total+=this.details[i].price;
+            }            
+          })
+          .catch((error) => {           
+          })
+          .finally(() => (this.loading_l = false));        
+    }
   },
-  created() {
-    window.addEventListener("scroll", this.color_nav);
-  },
-  destroyed() {
-    window.removeEventListener("scroll", this.color_nav);
-  },
-  mounted() {
-    this.color_nav();
+  mounted() {    
+    this.bill_id = this.$route.params.id;
+    this.getUserDefault();
+    this.get_details();
   },
 };
 </script>

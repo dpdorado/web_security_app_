@@ -1,5 +1,5 @@
 <template>
-    <div  class="section-margin">
+    <div  class="section-margin" v-if="!orderActive">
         <div class="container">
         <div class="py-5 text-center">
         <img class="d-block mx-auto mb-4" src="@/assets/start/img/web_security_app_.png" alt="" width="350" height="70">
@@ -58,16 +58,16 @@
             <form class="needs-validation" novalidate="">
                 <div class="row g-3">
                     <div class="col-sm-6">
-                    <label for="firstName" class="form-label">Nombre<span class="red">*</span></label>
-                    <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                    <label for="name" class="form-label">Nombre<span class="red">*</span></label>
+                    <input type="text" class="form-control overflow-auto" id="name" name=name value="user.name" v-model="user.name" placeholder="Nombre" required>
                     <div class="invalid-feedback">
                         El nombre es requerido.
                     </div>
                     </div>
 
                     <div class="col-sm-6">
-                    <label for="lastName" class="form-label">Apellido<span class="red">*</span></label>
-                    <input type="text" class="form-control" id="lastName" placeholder="" value="" required="">
+                    <label for="last_name" class="form-label">Apellido<span class="red">*</span></label>                    
+                    <input type="text" class="form-control overflow-auto" id="last_name" name=last_name value="user.last_name" v-model="user.last_name" placeholder="Apellido" required>
                     <div class="invalid-feedback">
                         El apellido es requerido.
                     </div>
@@ -75,8 +75,8 @@
                 
 
                     <div class="col-12">
-                    <label for="email" class="form-label">Email<span class="red">*</span></label>
-                    <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                    <label for="email" class="form-label">Email<span class="red">*</span></label>                    
+                    <input type="email" class="form-control overflow-auto" id="email" name=email value="user.email" v-model="user.email" placeholder="you@example.com" required>
                     <div class="invalid-feedback">
                     El correo es requerido.
                     </div>
@@ -130,7 +130,7 @@
                     </div>
                 </div>        
 
-                <button v-on:click="send_billling()" class="w-100 btn btn-primary btn-lg" type="submit">Confirmar dirección de facturación</button>
+                <button id="btnBilling" v-on:click="send_billling()" class="w-100 btn btn-primary btn-lg" type="submit">Confirmar dirección de facturación</button>
             </form>
 
             <hr class="my-4">
@@ -139,24 +139,24 @@
                 <h4 class="mb-3">Datos del Servidor</h4>
 
                  <div class="col-12">
-                    <label for="domain_name" class="form-label">Dominio<span class="red">*</span></label>
-                    <input type="text" class="form-control" id="domain_name" placeholder="domain.example" required="">
+                    <label for="domain_name" class="form-label">Dominio<span class="red">*</span></label>                    
+                    <input type="text" class="form-control overflow-auto" id="domain_name" name=domain_name value="server.domain_name" v-model="server.domain_name" placeholder="domain.example" required>
                     <div class="invalid-feedback">
                         El dominio es requerido.
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="url" class="form-label">Url<span class="red">*</span></label>
-                    <input type="text" class="form-control" id="url" placeholder="https://domain.example" required="">
+                    <label for="url" class="form-label">Url<span class="red">*</span></label>                    
+                    <input type="text" class="form-control overflow-auto" id="url" name=url value="server.url" v-model="server.url" placeholder="https://domain.example" required>
                     <div class="invalid-feedback">
                         La url es requerida.
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="ipServer" class="form-label">Ip del servidor<span class="red">*</span></label>
-                    <input type="text" class="form-control" id="ipServer" placeholder="127.0.0.1" required="">
+                    <label for="ipServer" class="form-label">Ip del servidor<span class="red">*</span></label>                    
+                    <input type="text" class="form-control overflow-auto" id="ipServer" name=ipServer value="server.ipServer" v-model="server.ipServer" placeholder="127.0.0.1" required>
                     <div class="invalid-feedback">
                         La ip del servidor es requerida.
                     </div>
@@ -165,8 +165,8 @@
                 <br>
 
                 <div class="row">
-                    <button v-on:click="active_formbilling()" type="button" class="w-100 col btn btn-dark">Paso anterio</button>
-                    <button v-on:click="send_server()" class="w-100 col btn btn-primary" type="submit">Confirmar datos del servidor</button>
+                    <button id="btnBackBilling" v-on:click="active_formbilling()" type="button" class="w-100 col btn btn-dark">Paso anterio</button>
+                    <button id="btnServer" v-on:click="send_server()" class="w-100 col btn btn-primary" type="submit">Confirmar datos del servidor</button>
                 </div>                 
             </form>
 
@@ -181,52 +181,46 @@
 
                 <div class="my-3">
                     <div class="form-check">
-                    <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="">
-                    <label class="form-check-label" for="credit">Credit card</label>
+                        <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked="" required="" value="Credito">
+                        <label class="form-check-label" for="credit">Credit card</label>                    
                     </div>
                     <div class="form-check">
-                    <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="">
-                    <label class="form-check-label" for="debit">Debit card</label>
+                        <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required="" value="Debito">
+                        <label class="form-check-label" for="debit">Debit card</label>
                     </div>
                     <div class="form-check">
-                    <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required="">
-                    <label class="form-check-label" for="paypal">PayPal</label>
+                        <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required="" value="Paypal">
+                        <label class="form-check-label" for="paypal">PayPal</label>
                     </div>
                 </div>
+                                                           
 
                 <div class="row gy-3">
-                    <div class="col-md-6">
-                    <label for="cc-name" class="form-label">Name on card</label>
-                    <input type="text" class="form-control" id="cc-name" placeholder="" required="">
-                    <small class="text-muted">Full name as displayed on card</small>
-                    <div class="invalid-feedback">
-                        Name on card is required
-                    </div>
-                    </div>
 
                     <div class="col-md-6">
-                    <label for="cc-number" class="form-label">Credit card number</label>
-                    <input type="text" class="form-control" id="cc-number" placeholder="" required="">
+                    <label for="name_targe" class="form-label">Nombre tarjeta</label>                    
+                    <input type="text" class="form-control overflow-auto" id="name_targe" name=name_targe value="target.name_targe" v-model="target.name_targe" placeholder="Visa" required readonly>                                        
                     <div class="invalid-feedback">
-                        Credit card number is required
+                        Número de tarjeta es requerido
                     </div>
                     </div>
 
-                    <div class="col-md-3">
-                    <label for="cc-expiration" class="form-label">Expiration</label>
-                    <input type="text" class="form-control" id="cc-expiration" placeholder="" required="">
+
+                    <div class="col-md-6">
+                    <label for="number_targe" class="form-label">Número de tarjeta</label>                    
+                    <input type="text" class="form-control overflow-auto" id="number_targe" name=number_targe value="target.number_targe" v-model="target.number_targe" placeholder="12345678989" required>                                        
                     <div class="invalid-feedback">
-                        Expiration date required
+                        Número de tarjeta es requerido
                     </div>
                     </div>
 
-                    <div class="col-md-3">
-                    <label for="cc-cvv" class="form-label">CVV</label>
-                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required="">
+                    <div class="col-md-6">
+                    <label for="code_segurity" class="form-label">Clave</label>                    
+                    <input type="text" class="form-control overflow-auto" id="code_segurity" name=code_segurity value="target.code_segurity" v-model="target.code_segurity" placeholder="1234" required>                                        
                     <div class="invalid-feedback">
-                        Security code required
+                       La clave es requerida
                     </div>
-                    </div>
+                    </div>                    
                 </div>
                            
                 <br>
@@ -241,6 +235,110 @@
         </div>
         </div></div>
   </div>
+    <div class="section-margin" v-else>
+          <div class="container mt-5 mb-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="text-left logo p-2 px-5"> <img src="@/assets/start/img/web_security_app_.png" lenght="50" width="150"> </div>
+                        <div class="invoice p-5">
+                            <h5>Tu orden esta completada!</h5> <span class="font-weight-bold d-block mt-4">Hola, {{user.name}}</span> <span>Tu orden ha sido confirmada, nos pondremos en contacto pronto!</span>
+                            <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="py-2"> <span class="d-block text-muted">Fecha Orden</span> <span>12 Jan,2018</span> </div>
+                                            </td>
+                                            <td>
+                                                <div class="py-2"> <span class="d-block text-muted">Orden No</span> <span>MT12332345</span> </div>
+                                            </td>
+                                            <td>
+                                                <div class="py-2"> <span class="d-block text-muted">Pago</span> <span>{{target.name_targe}}</span> </div>
+                                            </td>
+                                            <td>
+                                                <div class="py-2"> <span class="d-block text-muted">Email</span> <span>{{user.email}}</span> </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p><strong>Dominio del servidor: </strong>{{server.domain_name}}</p>
+                            <p><strong>Url: </strong>{{server.url}}</p>    
+                            <hr>                         
+                            <div class="product border-bottom table-responsive">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr v-for="(service,index) in this.shoppingCartInfo" v-bind:key="index">
+                                            <td width="20%"> <img src="@/assets/start/img/paquete.png" width="90"> </td>
+                                            <td width="60%"> <span class="font-weight-bold">{{service.service}}</span>
+                                                <div class="product-qty"> <span class="d-block">Quantity:1</span></div>
+                                            </td>
+                                            <td width="20%">
+                                                <div class="text-right"> <span class="font-weight-bold">{{service.price}}</span> </div>
+                                            </td>
+                                        </tr>                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row d-flex justify-content-end">
+                                <div class="col-md-5">
+                                    <table class="table table-borderless">
+                                        <tbody class="totals">
+                                            <tr>
+                                                <td>
+                                                    <div class="text-left"> <span class="text-muted">Subtotal</span> </div>
+                                                </td>
+                                                <td>
+                                                    <div class="text-right"> <span>${{this.totalPrice.total_price}}</span> </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="text-left"> <span class="text-muted">Shipping Fee</span> </div>
+                                                </td>
+                                                <td>
+                                                    <div class="text-right"> <span>$</span> </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="text-left"> <span class="text-muted">Tax Fee</span> </div>
+                                                </td>
+                                                <td>
+                                                    <div class="text-right"> <span>$</span> </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="text-left"> <span class="text-muted">Discount</span> </div>
+                                                </td>
+                                                <td>
+                                                    <div class="text-right"> <span class="text-success">$</span> </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-top border-bottom">
+                                                <td>
+                                                    <div class="text-left"> <span class="font-weight-bold">Subtotal</span> </div>
+                                                </td>
+                                                <td>
+                                                    <div class="text-right"> <span class="font-weight-bold">${{this.totalPrice.total_price}}</span> </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <p>Enviaremos un email de confirmación cuando se empece con el proceso!</p>
+                            <p class="font-weight-bold mb-0">Gracias por tu compra!</p> <span>Web Security App</span>
+                        </div>
+                        <div class="d-flex justify-content-between footer p-3"> <span>Si necesitas ayuda? visita nuestro <a href="#">centro de ayuda </a></span> <span>03 Octubre, 2021</span> </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+
 </template>
 
 <script>
@@ -259,7 +357,24 @@ export default {
             loading_l: false,
             count: 1,
             shoppingCartInfo: {},
-            totalPrice : 0
+            totalPrice : 0,
+            user: {},
+            server: {
+                state: true,
+                domain_name: '',
+                url: '',
+                ipServer: '',
+                user: 1
+            },
+            target: {
+                state: true,
+                code_segurity: '',
+                number_targe: '',
+                name_targe: 'Credito',
+                user: 1,
+                Invoce: 13
+            },
+            orderActive: false
         }
     },
     methods: {
@@ -279,15 +394,72 @@ export default {
                 console.log('¡Ocurrio un error!');
             }).finally(() => this.loading_l=false)        
         },
+        get_custom_user(){
+            const path = 'http://3.14.19.238:8000/usuario/usuario/1';                            
+            axios.get(path).then(response => {                
+                console.log(response.data);
+                this.user = response.data;
+                this.loadFormUser();
+                // this.shoppingCartInfo = response.data.shopping;  
+                // this.totalPrice = this.shoppingCartInfo.pop();
+            }).catch(error => {            
+                console.log('¡Error al obtener los datos del usuario!');
+            }).finally(() => this.loading_l=false)
+        },
+        loadFormUser(){
+            $("#state").val("Cauca").trigger("change");
+        },
         goToConfrmation(){
-           this.$router.push('/home/orderconfirmation');
+           //this.$router.push('/home/orderconfirmation');
+           this.orderActive = true;           
         },
         validateForms(){
-            //TODO: validate form billing and after validate payment
-            const path = 'http://3.14.19.238:8000/shopping/buyService/';                            
-            axios.post(path).then(response => {                                
-                console.log('Compra');
-                this.goToConfrmation();               
+            //TODO: validate form billing and after validate payment            
+            const path = 'http://3.14.19.238:8000/shopping/buyService/';
+            const path_1 = 'http://3.14.19.238:8000/target/server_create/';
+            const path_2 = 'http://3.14.19.238:8000/target/target_create/';
+
+            console.log(this.target);
+            axios.post(path_1, this.server)
+            .then(response => {
+                console.log(response);            
+                this.succed=true;
+                this.success = [];    
+                this.success.push({'message': 'Ocurrio un error revise los datos'});
+                this.errored = false;
+                this.errors = [];                        
+            })
+            .catch(error => {              
+                console.log(error); 
+                this.succed=false;             
+                this.errored = true;
+                this.errors = [];
+                this.errors.push({'message':'No se ha podido actualizar la prueba de penetración, revise que el id owasd o el nombre no este repetidos.'});                
+            })
+            .finally(() => this.loading = false);               
+
+            axios.post(path_2, this.taget)
+            .then(response => {
+                console.log(response);            
+                this.succed=true;
+                this.success = [];    
+                this.success.push({'message': 'Ocurrio un error revise los datos'});
+                this.errored = false;
+                this.errors = [];                        
+            })
+            .catch(error => {              
+                console.log(error); 
+                this.succed=false;             
+                this.errored = true;
+                this.errors = [];
+                this.errors.push({'message':'Datos de tarjeta invalidos'});                
+            })
+            .finally(() => this.loading = false);               
+
+            
+            axios.post(path).then(response => {     
+                console.log('Servicio comprado');                
+                this.goToConfrmation();                               
             }).catch(error => {            
                 console.log('¡Ocurrio un error!');
                 console.log(error);
@@ -298,23 +470,26 @@ export default {
                     message:
                     "¡Validar los datos, ha ocuurrido un error!!!",
                 });     
-                console.log('EErrorcompra');
-                this.goToConfrmation();             
-            }).finally(() => this.loading_l=false)
+                console.log('EErrorcompra');     
+                 this.goToConfrmation();                                                                                         
+            }).finally(() => this.loading_l=false)            
         },
         send_billling(){
             //TODO send form
             this.readonly_formbilling();
+            $('#btnBilling').prop('disabled', true);
             $('#server').show();
         },
         send_server(){
-            //TODO send form            
             this.readonly_formserver();
-            $('#payment').show();
+            $('#btnBackBilling').prop('disabled', true);
+            $('#btnServer').prop('disabled', true);
+            $('#payment').show();    
+            $('#name_targe').val('Credito');        
         },
         readonly_formbilling(){
-            $('#firstName').attr('readonly', true);
-            $('#lastName').attr('readonly', true);
+            $('#name').attr('readonly', true);
+            $('#last_name').attr('readonly', true);
             $('#email').attr('readonly', true);
             $('#address').attr('readonly', true);
             $('#country').attr('readonly', true);
@@ -327,18 +502,21 @@ export default {
         },    
         active_formbilling(){
             $('#server').hide();
-            $('#firstName').attr('readonly', false);
-            $('#lastName').attr('readonly', false);
+            $('#name').attr('readonly', false);
+            $('#last_name').attr('readonly', false);
             $('#email').attr('readonly', false);
             $('#address').attr('readonly', false);
             $('#country').attr('readonly', false);
             $('#state').attr('readonly', false);
+            $('#btnBilling').prop('disabled', false);            
         },
         active_formserver(){
             $('#payment').hide();
             $('#domain_name').attr('readonly', false);
             $('#url').attr('readonly', false);
             $('#ipServer').attr('readonly', false);
+            $('#btnBackBilling').prop('disabled', false);
+            $('#btnServer').prop('disabled', false);            
         }
     },
     created() {
@@ -348,8 +526,10 @@ export default {
         window.removeEventListener("scroll", this.color_nav);
     },
     mounted() {
+        
         this.color_nav(); 
         this.get_shopping_info();
+        this.get_custom_user();                
 
         $('#state').on('change', function(e) {
             let post = [
@@ -362,8 +542,23 @@ export default {
             document.getElementById("zip").value =  post[e.target.selectedIndex];                             
         });
         $('#server').hide();
-        $('#payment').hide();
+        $('#payment').hide();                
 
+        $("#credit").change(function() {
+            if(this.checked) {
+                $('#name_targe').val(this.defaultValue).trigger();
+            }
+        });
+        $("#debit").change(function() {
+            if(this.checked) {
+                $('#name_targe').val(this.defaultValue).trigger();
+            }
+        });
+        $("#paypal").change(function() {
+            if(this.checked) {
+                $('#name_targe').val(this.defaultValue).trigger();
+            }
+        });
     }    
 }
 

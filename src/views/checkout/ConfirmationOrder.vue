@@ -145,7 +145,7 @@ export default {
     },
     mounted() {        
         this.color_nav(); 
-        this.get_shopping_info();
+        //this.get_shopping_info();
     }    
 }
 

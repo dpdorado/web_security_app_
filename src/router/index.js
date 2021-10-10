@@ -333,7 +333,7 @@ function configRoutes () {
               component: Bill_list
             },
             {
-              path: 'show',
+              path: 'show/:id',
               name: 'Bill',
               component: Bill
             }
