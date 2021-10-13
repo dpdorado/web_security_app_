@@ -116,7 +116,12 @@ export default {
             loading_l: false,
             count: 1,
             shoppingCartInfo: {},
-            totalPrice : 0
+            totalPrice : 0,                    
+            _config: {
+                headers: { 
+                    Authorization: 'Bearer ' 
+                }
+            }
         }
     },
     methods: {
@@ -128,8 +133,8 @@ export default {
             document.getElementById("navbar").style.backgroundColor = color;
         },
         get_shopping_info(){            
-            const path = 'http://3.14.19.238:8000/shopping/shoppingCartList/';                            
-            axios.get(path).then(response => {                
+            const path = this.$server+'/shopping/shoppingCartList/';                            
+            axios.get(path, this._config).then(response => {
                 this.shoppingCartInfo = response.data.shopping;  
                 this.totalPrice = this.shoppingCartInfo.pop();
             }).catch(error => {            
@@ -143,7 +148,9 @@ export default {
     destroyed() {
         window.removeEventListener("scroll", this.color_nav);
     },
-    mounted() {        
+    mounted() {      
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);    
         this.color_nav(); 
         //this.get_shopping_info();
     }    

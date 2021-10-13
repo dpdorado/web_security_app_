@@ -140,7 +140,12 @@
             description: '',
             attacks:[
 
-            ]                                  
+            ],        
+            _config: {
+                headers: { 
+                    Authorization: 'Bearer ' 
+                }
+            }
         },
         attacks_sel:[]  
       }
@@ -157,7 +162,7 @@
         send_form(e){
             e.preventDefault();          
             this.set_id_attacks();
-            axios.put('http://3.14.19.238:8000/pentesting/package_update/'+this.package_o.id, this.package_o)
+            axios.put(this.$server+'/pentesting/package_update/'+this.package_o.id, this.package_o, this._config)
             .then(response => {   
                 console.log(response);               
                 this.add_message_success({'message':'El paquete: '+this.package_o.name+' ha sido actualizado correctamente.'});
@@ -229,6 +234,8 @@
         }
     }, 
     mounted() {
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);   
       this.package_o = this.package_;    
       this.get_attacks();
       this.set_attacks_sel();

@@ -137,7 +137,12 @@
                 ]                                  
             },
             succed: false,
-            attacks_sel:[]
+            attacks_sel:[],            
+            _config: {
+                headers: { 
+                    Authorization: 'Bearer ' 
+                }
+            }
         }
     },
     computed:{
@@ -148,7 +153,7 @@
         ...Vuex.mapActions('StoreAttack',['get_attacks']),             
         //crear un store de categorias para evitar
         get_categories(){
-            const path = 'http://3.14.19.238:8000/pentesting/category_list/';          
+            const path = this.$server+'/pentesting/category_list/';          
           
           axios.get(path).then(response => {      
             console.log(response);
@@ -163,7 +168,7 @@
         send_form(e){
             e.preventDefault();          
             this.set_id_attacks();
-            axios.post('http://3.14.19.238:8000/pentesting/package_create/', this.package_)
+            axios.post(this.$server+'/pentesting/package_create/', this.package_,this._config)
             .then(response => {
                 console.log(response);  
                 this.add_message_success({'message':'El paquete: '+this.package_.name+' ha sido registrado correctamente.'});                  
@@ -205,6 +210,8 @@
         }
     },
     mounted() {
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);   
         this.get_attacks();           
     },    
   };  

@@ -107,7 +107,12 @@ export default {
             package_id : 0,
             total_discount:0,
             total_total:0,
-            index:0
+            index:0,        
+            _config: {
+                headers: { 
+                    Authorization: 'Bearer ' 
+                }
+            }
         }
     },
     methods: {
@@ -123,8 +128,8 @@ export default {
             return this.index;
         },
         get_package(){
-            const path = 'http://3.14.19.238:8000/pentesting/package_search/'+this.package_id;
-            axios.get(path).then(response => {                      
+            const path = this.$server+'/pentesting/package_search/'+this.package_id;
+            axios.get(path,this._config).then(response => {                      
                 this.package = response.data['Package'][0];
                 this.calculate_totals();
                 console.log( this.package);                        
@@ -149,12 +154,12 @@ export default {
             this.total_discount = discount;
         }, 
         addToCart(){
-            const path = 'http://3.14.19.238:8000/shopping/shoppingCartAdd/';   
+            const path = this.$server+'/shopping/shoppingCartAdd/';   
             let info = {
                 "users": 1,
                 "services": this.package.service_id
             };                         
-            axios.post(path, info).then(response => {
+            axios.post(path, info, this._config).then(response => {
                 console.log(response);
                 this.errored_l = false;
                 this.succed_l = true;
@@ -187,6 +192,8 @@ export default {
         window.removeEventListener("scroll", this.color_nav);
     },
     mounted() {
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);
         this.package_id = this.$route.params.id;        
         this.color_nav();    
         this.get_package();

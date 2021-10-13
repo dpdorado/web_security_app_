@@ -139,7 +139,12 @@
             script: '',
             category: ''                                    
         },
-        category_name : ''      
+        category_name : '',                
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+        }     
       }
     }, 
     filters: {      
@@ -150,7 +155,7 @@
     methods: {
        ...Vuex.mapActions('StoreAttack',['add_message_success']),
       get_categories(){
-          const path = 'http://3.14.19.238:8000/pentesting/category_list/';          
+          const path = this.$server+'/pentesting/category_list/';          
         
         axios.get(path).then(response => {      
           console.log(response)
@@ -163,9 +168,9 @@
         .finally(() => this.loading = false)
       },
       get_category_name(){
-        const path = 'http://3.14.19.238:8000/pentesting/category_search/'+this.attack.category;          
+        const path = this.$server+'/pentesting/category_search/'+this.attack.category;          
         
-        axios.get(path).then(response => {                
+        axios.get(path,this._config).then(response => {                
           console.log(response);  
           this.category_name = response.data.category_name;
         })
@@ -178,7 +183,7 @@
       send_form_edition(e){
           e.preventDefault();          
 
-          axios.put('http://3.14.19.238:8000/pentesting/attack_update/'+this.attack_o.id, this.attack_o)
+          axios.put(this.$server+'/pentesting/attack_update/'+this.attack_o.id, this.attack_o, this._config)
           .then(response => {
               console.log(response)            
               this.add_message_success({'message':'La prueba de penetración: '+this.attack_o.name+' ha sido actualizada correctamente.'});                  
@@ -198,6 +203,8 @@
       }
     }, 
     mounted() {
+      var config = localStorage.getItem('config');            
+      this._config = JSON.parse(config)    
       this.attack_o = this.attack;
       this.get_categories();
       this.get_category_name();

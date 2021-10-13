@@ -146,7 +146,12 @@
         customLabels,
         packages:[],
         count_attacks_search:0,
-        name:''
+        name:'',                
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+        }
       }
     }, 
     filters: {      
@@ -166,8 +171,8 @@
       ...Vuex.mapActions('StorePackage',['package_aux']),
       
       get_packages(){
-        const path = 'http://3.14.19.238:8000/pentesting/package_list/'                
-        axios.get(path).then(response => { 
+        const path = this.$server+'/pentesting/package_list/'                
+        axios.get(path, this._config).then(response => { 
             console.log(response);       
             this.packages = response.data;                       
         }).catch(error => {
@@ -180,8 +185,8 @@
       },
       remove_package(){
           this.darkModal = false;
-          const path = 'http://3.14.19.238:8000/pentesting/package_delete/'+this.package_id_deleted;
-          axios.delete(path).then(response => {    
+          const path = this.$server+'/pentesting/package_delete/'+this.package_id_deleted;
+          axios.delete(path,this._config).then(response => {    
               console.log(response);   
               this.errored_l =false;
               this.succed_l=true;
@@ -232,6 +237,8 @@
       }
     },
     mounted() {
+              var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);   
       this.set_errors();
       this.get_packages();
     }

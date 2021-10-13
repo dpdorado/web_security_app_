@@ -108,7 +108,12 @@ export default {
       packages: [],    
       count_attacks_search: 0,
       name: "",    
-      attacks_aux: {},
+      attacks_aux: {},        
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+        }
     };
   },
   filters: {},
@@ -135,12 +140,12 @@ export default {
       this.$router.push('/home/shoppingcart')
     },   
     addToCart(id, name){
-     const path = 'http://3.14.19.238:8000/shopping/shoppingCartAdd/';   
+     const path = this.$server+'/shopping/shoppingCartAdd/';   
       let info = {
         "users": 1,
         "services": id
       };                         
-      axios.post(path, info).then(response => {
+      axios.post(path, info, this._config).then(response => {
           console.log(response);
           this.errored_l = false;
           this.succed_l = true;
@@ -166,8 +171,8 @@ export default {
       }).finally(() => this.loading_l=false)                 
     },  
     get_packages(){
-      const path = 'http://3.14.19.238:8000/pentesting/package_list/'                
-      axios.get(path).then(response => { 
+      const path = this.$server+'/pentesting/package_list/'                
+      axios.get(path, this._config).then(response => { 
           console.log(response);       
           this.packages = response.data; 
           //this.get_attacks();         
@@ -182,11 +187,11 @@ export default {
     },
     get_attacks(){  
       //TODO: quitar         
-      const path = 'http://3.14.19.238:8000/pentesting/attack_search/';        
+      const path = this.$server+'/pentesting/attack_search/';        
       for (let i = 0; i < this.packages.length; i++) {                
         let attacks = this.packages[i].attacks;        
         for (let j = 0; j < attacks.length; j++) {          
-          axios.get(path+attacks[j]).then(response => {
+          axios.get(path+attacks[j], this._config).then(response => {
               this.packages[i].attacks[j] = {
                 'id' : response.data.Attack[0].id,
                 'name' : response.data.Attack[0].name
@@ -224,6 +229,8 @@ export default {
     window.removeEventListener("scroll", this.color_nav);
   },
   mounted() {
+    var config = localStorage.getItem('config');            
+    this._config = JSON.parse(config);
     this.color_nav();
     this.set_errors();
     this.get_packages();    

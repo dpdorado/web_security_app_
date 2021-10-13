@@ -188,7 +188,12 @@ export default {
       pageOfItems: [],
       customLabels,
       attacks: [],
-      count_attacks_search: 0,
+      count_attacks_search: 0,        
+      _config: {
+        headers: { 
+            Authorization: 'Bearer ' 
+        }
+      }
     };
   },
   filters: {},
@@ -208,9 +213,9 @@ export default {
     ...Vuex.mapActions("StoreAttack", ["edit_attacks", "attack_aux"]),
 
     get_attacks() {
-      const path = "http://3.14.19.238:8000/pentesting/attack_list/";
+      const path = this.$server+'/pentesting/attack_list/';
       axios
-        .get(path)
+        .get(path, this._config)
         .then((response) => {
           console.log(response);
           this.attacks = response.data;
@@ -231,10 +236,10 @@ export default {
     remove_attack() {
       this.darkModal = false;
       const path =
-        "http://3.14.19.238:8000/pentesting/attack_delete/" +
+        this.$server+'/pentesting/attack_delete/' +
         this.attack_id_deleted;
       axios
-        .delete(path)
+        .delete(path, this._config)
         .then((response) => {
           console.log(response);
           this.errored_l = false;
@@ -295,6 +300,8 @@ export default {
     },
   },
   mounted() {
+    var config = localStorage.getItem('config');            
+    this._config = JSON.parse(config)      
     this.set_errors();
     this.get_attacks();
   },

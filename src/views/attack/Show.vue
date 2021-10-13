@@ -121,6 +121,11 @@
           state:false,
           category_name: '',
           description: ''
+        },
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
         }
       }
     }, 
@@ -132,9 +137,9 @@
     },
     methods: {
       get_category(){
-        const path = 'http://3.14.19.238:8000/pentesting/category_search/'+this.attack.category;          
+        const path = this.$server+'/pentesting/category_search/'+this.attack.category;          
         
-        axios.get(path).then(response => {   
+        axios.get(path, this._config).then(response => {   
           console.log(response);             
           this.category = response.data["Category"][0];
         })
@@ -156,6 +161,8 @@
       }
     },         
     mounted() {
+      var config = localStorage.getItem('config');            
+      this._config = JSON.parse(config)  
       this.attack_o = this.attack;      
       this.get_category();
       this.set_state();

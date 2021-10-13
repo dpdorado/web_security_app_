@@ -103,7 +103,26 @@ export default {
       customLabels,
       attacks: [],
       count_attacks_search: 0,
-      name: "",          
+      name: "",  
+      _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+      },
+      _user : {
+        token: '',
+        userid: -1,
+        username: '',
+        email: '',
+        name: '',      
+        last_name: '',
+        is_logged: false,        
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+        }
+      },
     };
   },
   filters: {},
@@ -116,6 +135,8 @@ export default {
       "success",
     ]),
     ...Vuex.mapGetters("StoreAttack", ["get_success"]),
+    ...Vuex.mapState("StoreGlobal", ["user", "config"]),
+    ...Vuex.mapGetters("StoreGlobal", ["get_user", "get_config"]),
      search_attacks: function () {       
         if (this.name==''){
           return this.attacks;
@@ -126,16 +147,17 @@ export default {
   },
   methods: {
     ...Vuex.mapActions('StoreAttack',['attack_aux']),
+    ...Vuex.mapActions("StoreGlobal", ["change_user", "change_config"]),
     viewCart(){
       this.$router.push('/home/shoppingcart');
     },    
     addToCart(id, name){
-      const path = 'http://3.14.19.238:8000/shopping/shoppingCartAdd/';   
+      const path = this.$server+'/shopping/shoppingCartAdd/';   
       let info = {
         "users": 1,
         "services": id
       };                         
-      axios.post(path, info).then(response => {
+      axios.post(path, info, this._config).then(response => {
           console.log(response);
           this.errored_l = false;
           this.succed_l = true;
@@ -161,8 +183,8 @@ export default {
       }).finally(() => this.loading_l=false)             
     },  
     get_attacks(){
-      const path = 'http://3.14.19.238:8000/pentesting/attack_list/'                
-      axios.get(path).then(response => { 
+      const path = this.$server+'/pentesting/attack_list/'                
+      axios.get(path, this._config).then(response => { 
           console.log(response);       
           this.attacks = response.data;                       
       }).catch(error => {
@@ -198,6 +220,11 @@ export default {
     window.removeEventListener("scroll", this.color_nav);
   },
   mounted() {
+    var config = localStorage.getItem('config');            
+    this._config = JSON.parse(config);   
+    console.log(this._config);
+    //this._user = this.user
+    //this._config.headers.Authorization = 'Bearer '+this._user.token
     this.color_nav();
     this.set_errors();
     this.get_attacks();    

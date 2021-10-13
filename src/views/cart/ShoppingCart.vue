@@ -22,7 +22,12 @@ export default {
     },
     data () {
       return {       
-        shoppingCartInfo: {}
+        shoppingCartInfo: {},    
+        _config: {
+            headers: { 
+                Authorization: 'Bearer ' 
+            }
+        }
       }
     }, 
     methods:{
@@ -31,8 +36,8 @@ export default {
         },
         shopping_cart_info(){
             console.log('entrando:    dsdcsd');
-            const path = 'http://3.14.19.238:8000/shopping/shoppingCartList/';                            
-            axios.get(path).then(response => {                
+            const path = this.$server+'/shopping/shoppingCartList/';                            
+            axios.get(path, this._config).then(response => {                
                 this.shoppingCartInfo = response.data.shopping;                                           
                 
                 if (this.shoppingCartInfo.length > 1){
@@ -45,8 +50,10 @@ export default {
             }).finally(() => this.loading_l=false)                                   
         }
     },
-    mounted() {          
-      this.shopping_cart_info()
+    mounted() {   
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config); 
+        this.shopping_cart_info()
     }
 }
 

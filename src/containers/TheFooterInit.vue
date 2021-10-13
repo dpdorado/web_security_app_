@@ -56,6 +56,7 @@
           </div>
         </div>
         <div class="footer-bottom row align-items-center text-center text-lg-left">
+          <h1>{{user.token}}</h1>
           <p class="footer-text m-0 col-lg-8 col-md-12">
               Copyright &copy; 2021 Todos los derechos reservados | Esta aplicación fue desarrollada por DD
           </p>
@@ -71,7 +72,29 @@
 </template>
 
 <script>
+import Vuex from "vuex";
+
 export default {
-  name: 'TheFooterInit'
+  name: 'TheFooterInit',
+  data() {
+    return {      
+      _user : {
+            token: '',
+            userid: -1,
+            username: '',
+            email: '',
+            name: '',      
+            last_name: '',
+            is_logged: false
+        }        
+    }
+  },
+  computed: {
+    ...Vuex.mapState("StoreGlobal", ["user"]),
+    ...Vuex.mapGetters("StoreGlobal", ["get_user"])   
+  },
+  methods: {    
+    ...Vuex.mapActions("StoreStore", ["change_user"])
+  }
 }
 </script>

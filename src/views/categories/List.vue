@@ -228,7 +228,12 @@
         },
         create_category: false,
         count_attacks_search:0,
-        name:''
+        name:'',        
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+        }
         /*categories_prueba:[
           {
             id: 1,
@@ -275,7 +280,7 @@
       send_form(e){          
           e.preventDefault();          
 
-          axios.post('http://3.14.19.238:8000/pentesting/category_create/', this.categor)
+          axios.post(this.$server+'/pentesting/category_create/', this.categor,this._config)
           .then(response => {
               console.log(response)
               this.succed=true;
@@ -294,22 +299,22 @@
           .finally(() => this.loading = false);                           
       },
       get_categories(){
-            const path = 'http://3.14.19.238:8000/pentesting/category_list/';                
-            axios.get(path).then(response => {    
+            const path = this.$server+'/pentesting/category_list/';                
+            axios.get(path, this._config).then(response => {
                 console.log(response);   
                 this.categories = response.data;                            
             }).catch(error => {
                 console.log(error);     
                 this.errored= true;
-                this.errors=[];
+                this.errors = [];
                 this.errors.push({'message':'¡Lo sentimos los datos no estan disponibles en estos momentos, intentalo más tarde!!!'});                
             }).finally(() => this.loading = false);               
         },
 
       remove_category(){        
         this.darkModal = false;
-        const path = 'http://3.14.19.238:8000/pentesting/category_delete/'+this.category_deleted.id;
-        axios.delete(path).then(response => {                           
+        const path = this.$server+'/pentesting/category_delete/'+this.category_deleted.id;
+        axios.delete(path, this._config).then(response => {                           
             console.log(response);   
             this.succed = true;
             this.success=[];
@@ -333,7 +338,7 @@
       },
       save_category(category){       
         this.index_edit=-1;        
-        axios.put('http://3.14.19.238:8000/pentesting/category_update/'+category.id, category)
+        axios.put(this.$server+'/pentesting/category_update/'+category.id, category, this._config)
           .then(response => {
               console.log(response); 
               this.succed  = true;
@@ -382,6 +387,8 @@
         }
     },
     mounted() {
+      var config = localStorage.getItem('config');            
+      this._config = JSON.parse(config);    
       this.get_categories()
     }
   };  

@@ -76,12 +76,13 @@
                 <td>{{bill.representante}}</td>
                 <td>{{bill.estado}}</td>
                 <td class="">
-                  <div class="btn-toolbar text-right">                   
-                    <em class="bi-eye" role="img" aria-label="Eye"></em>
+                  <div class="btn-toolbar text-right">                              
                     <button
                       v-on:click="show_bill(bill)"
                       class="btn btn-success btn-sm mr-3"
-                    />
+                    >
+                    <CIcon name="bi-eye" />                    
+                    </button>
                     <button
                       v-on:click="
                         (darkModal = true),
@@ -167,7 +168,12 @@ export default {
       users:[],
       user_names:[],
       dates_table: [],
-      count_bills_search: 0,
+      count_bills_search: 0,        
+      _config: {
+        headers: { 
+            Authorization: 'Bearer ' 
+        }
+      }
     };
   },
   filters: {},
@@ -189,7 +195,7 @@ export default {
     get_bills() {
       const path = "http://3.14.19.238:8000/shopping/InvoceList/";
       axios
-        .get(path)
+        .get(path, this._config)
         .then((response) => {                    
           this.bills = response.data;
           for (var i = 0; i < this.bills.length;i++)
@@ -219,7 +225,7 @@ export default {
     getUserDefault(){
       const path = "http://3.14.19.238:8000/usuario/usuario/1";                              
         axios
-          .get(path)
+          .get(path, this._config)
           .then((response) => {                    
             console.log(response.data.name);
               var name = response.data.name;
@@ -245,7 +251,7 @@ export default {
       for (var k = 0; k < this.dates_table.length;k++){
         var path_aux = path + this.dates_table[k].id;        
         axios
-          .get(path_aux)
+          .get(path_aux, this._config)
           .then((response) => {                   
             var user = response.data['invoceDetail '][0].user;            
             this.users.push(user);                      
@@ -271,7 +277,7 @@ export default {
         var path_aux = path + this.users[j];  
         console.log(path_aux);
         axios
-          .get(path_aux)
+          .get(path_aux, this._config)
           .then((response) => {                    
             console.log(response.data);          
             //this.dates_table[j].user_id = response.data;            
@@ -360,6 +366,8 @@ export default {
     }
   },
   mounted() {
+    var config = localStorage.getItem('config');            
+    this._config = JSON.parse(config);  
     // this.set_errors();
     this.get_bills();    
     this.getUserDefault();

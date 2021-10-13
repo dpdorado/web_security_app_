@@ -28,16 +28,7 @@
                   <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/services/attacks'">Pruebas</router-link></li>
                   <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/services/packages'">Paquetes</router-link></li>
                 </ul>
-							</li>
-              <li class="nav-item"><a class="nav-link" href="pricing.html">Price</a>
-              <li class="nav-item submenu dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                  aria-expanded="false">Pages</a>
-                <ul class="dropdown-menu">
-                  <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
-                  <li class="nav-item"><a class="nav-link" href="blog-details.html">Blog Details</a></li>
-                </ul>
-							</li>
+							</li>              
               <li class="nav-item"><router-link class="nav-link" v-bind:to="'/home/contact'">Contacto</router-link></li>
               <li class="nav-item">
                   <button v-on:click="sign_in()" class="button boton_1 button-header bg mr-1"><em class="cil-user"/> Mi cuenta</button> 
@@ -92,6 +83,7 @@
 </template>
 
 <script>
+import Vuex from "vuex";
 
 export default {
   name: 'TheHeaderInit',
@@ -100,10 +92,23 @@ export default {
   },
   data() {
     return {
-      navbarOpen: true
+      navbarOpen: true,
+      _user : {
+            token: '',
+            userid: -1,
+            username: '',
+            email: '',
+            name: '',      
+            last_name: '',
+            is_logged: false
+        }
     }
   },  
   components: {    
+  },
+  computed: {
+    ...Vuex.mapState("StoreGlobal", ["user"]),
+    ...Vuex.mapGetters("StoreGlobal", ["get_user"])   
   },
   created () {
     window.addEventListener('scroll', this.scrollFunction);
@@ -111,7 +116,8 @@ export default {
   destroyed () {
     window.removeEventListener('scroll', this.scrollFunction);
   },
-  methods:{    
+  methods:{  
+    ...Vuex.mapActions("StoreStore", ["change_user"]), 
     toggleNavbar() {
       this.navbarOpen = !this.navbarOpen;
     },
@@ -123,10 +129,20 @@ export default {
       }
     },
     sign_in(){
-      this.$router.push('/pages/login')
+      let is_logged = localStorage.getItem('is_logged');      
+      if (is_logged == 1){
+        this.$router.push('/dashboard')
+      }else{
+        this.$router.push('/pages/login')
+      }      
     },
     shopping_cart(){
-      this.$router.push('/home/shoppingcart')
+      let is_logged = localStorage.getItem('is_logged'); 
+      if (is_logged == 1){
+        this.$router.push('/home/shoppingcart')
+      }else{
+        this.$router.push('/pages/login')
+      }      
     }
   }
 }

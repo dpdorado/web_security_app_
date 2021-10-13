@@ -128,15 +128,20 @@
                 owas_id: '',
                 script: '',
                 category: ''                                    
-            },           
+            },             
+            _config: {
+                headers: { 
+                    Authorization: 'Bearer ' 
+                }
+            }          
         }
     },    
     methods:{       
         ...Vuex.mapActions('StoreAttack',['add_message_success']),
         get_categories(){
-            const path = 'http://3.14.19.238:8000/pentesting/category_list/';          
+            const path = this.$server+'/pentesting/category_list/';          
           
-          axios.get(path).then(response => {      
+          axios.get(path,this._config).then(response => {      
             console.log(response)
             this.categories = response.data
           })
@@ -148,7 +153,7 @@
         },
         send_form(e){
             e.preventDefault();                      
-            axios.post('http://3.14.19.238:8000/pentesting/attack_create/', this.attack)
+            axios.post(this.$server+'/pentesting/attack_create/', this.attack, this._config)
             .then(response => {
                 console.log(response);  
                 this.add_message_success({'message':'La prueba de penetración: '+this.attack.name+' ha sido registrada correctamente.'});                  
@@ -168,7 +173,9 @@
         } 
     },
     mounted() {
-      this.get_categories()      
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config)         
+        this.get_categories()      
     },    
   };  
 </script>

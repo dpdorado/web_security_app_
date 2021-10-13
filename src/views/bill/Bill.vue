@@ -211,17 +211,23 @@ export default {
       bill_id: '',
       user : {},
       details:[],
-      total:0
+      total:0,        
+      _config: {
+        headers: { 
+            Authorization: 'Bearer ' 
+        }
+      }
     };
   },
   
   methods: {
     getUserDefault(){
-      const path = "http://3.14.19.238:8000/usuario/usuario/1";                              
+      var userId = localStorage.getItem('userid'); 
+      const path = this.$server+'/usuario/usuario/'+userId;                              
         axios
-          .get(path)
+          .get(path,this._config)
           .then((response) => {                    
-            
+            console.log(response);
             this.user = response.data;             
           })
           .catch((error) => {
@@ -231,10 +237,12 @@ export default {
     },
     get_details(){    
       console.log('details');
-      const path = "http://3.14.19.238:8000/shopping/InvoceDetail/"+this.bill_id;                       
+      const path = this.$server+'/shopping/InvoceDetail/'+this.bill_id;                       
         axios
-          .get(path)
-          .then((response) => {                   
+          .get(path, this._config)
+          .then((response) => {     
+            console.log('invoice deetails');
+            console.log(response.data);
             this.details = response.data['invoceDetail '];           
             for (var i = 0; i < this.details.length; i++){
               this.total+=this.details[i].price;
@@ -245,7 +253,9 @@ export default {
           .finally(() => (this.loading_l = false));        
     }
   },
-  mounted() {    
+  mounted() {  
+    var config = localStorage.getItem('config');            
+    this._config = JSON.parse(config);  
     this.bill_id = this.$route.params.id;
     this.getUserDefault();
     this.get_details();

@@ -216,7 +216,7 @@
 
                     <div class="col-md-6">
                     <label for="code_segurity" class="form-label">Clave</label>                    
-                    <input type="text" class="form-control overflow-auto" id="code_segurity" name=code_segurity value="target.code_segurity" v-model="target.code_segurity" placeholder="1234" required>                                        
+                    <input type="password" class="form-control overflow-auto" id="code_segurity" name=code_segurity value="target.code_segurity" v-model="target.code_segurity" placeholder="1234" required>                                        
                     <div class="invalid-feedback">
                        La clave es requerida
                     </div>
@@ -367,6 +367,7 @@ export default {
                 user: 1
             },
             target: {
+                id: 0,
                 state: true,
                 code_segurity: '',
                 number_targe: '',
@@ -374,7 +375,17 @@ export default {
                 user: 1,
                 Invoce: 13
             },
-            orderActive: false
+            orderActive: false,        
+            _config: {
+                headers: { 
+                    Authorization: 'Bearer ' 
+                }
+            },
+            datasBuy: {
+                target: 0,
+                server: 0
+            },
+            serverLen:0
         }
     },
     methods: {
@@ -386,8 +397,8 @@ export default {
             document.getElementById("navbar").style.backgroundColor = color;
         },
         get_shopping_info(){            
-            const path = 'http://3.14.19.238:8000/shopping/shoppingCartList/';                            
-            axios.get(path).then(response => {                
+            const path = this.$server+'/shopping/shoppingCartList/';                            
+            axios.get(path,this._config).then(response => {                
                 this.shoppingCartInfo = response.data.shopping;  
                 this.totalPrice = this.shoppingCartInfo.pop();
             }).catch(error => {            
@@ -395,13 +406,11 @@ export default {
             }).finally(() => this.loading_l=false)        
         },
         get_custom_user(){
-            const path = 'http://3.14.19.238:8000/usuario/usuario/1';                            
-            axios.get(path).then(response => {                
+            const path = this.$server+'/usuario/usuario/1';                            
+            axios.get(path,this._config).then(response => {                
                 console.log(response.data);
                 this.user = response.data;
-                this.loadFormUser();
-                // this.shoppingCartInfo = response.data.shopping;  
-                // this.totalPrice = this.shoppingCartInfo.pop();
+                this.loadFormUser();                
             }).catch(error => {            
                 console.log('¡Error al obtener los datos del usuario!');
             }).finally(() => this.loading_l=false)
@@ -413,14 +422,44 @@ export default {
            //this.$router.push('/home/orderconfirmation');
            this.orderActive = true;           
         },
+        getTargets(){
+            const path = this.$server+'/target/target_list/';
+            var userId =  localStorage.getItem('userid');
+            axios.get(path,this._config).then(response => {                
+                var targets = response.data;
+                for (var k = 0; k < targets.length;k++){                    
+                    if (targets[k].user == userId){
+                        this.target = targets[k];
+                        console.log(this.target);
+                        break;
+                    }
+                }                
+                
+            }).catch(error => {            
+                console.log('¡Error al obtener los datos del usuario!');
+            }).finally(() => this.loading_l=false)
+        },
+        getServerLenght(){
+            const path_3 = this.$server+'/target/server_list/';
+             axios.get(path_3,this._config).then(response => {                
+                var data = response.data;
+                var len = response.data.length;
+                this.serverLen = data[len-1].id;
+            }).catch(error => {            
+                console.log('¡Error al obtener los datos del usuario!');
+            }).finally(() => this.loading_l=false)
+
+        },
         validateForms(){
             //TODO: validate form billing and after validate payment            
-            const path = 'http://3.14.19.238:8000/shopping/buyService/';
-            const path_1 = 'http://3.14.19.238:8000/target/server_create/';
-            const path_2 = 'http://3.14.19.238:8000/target/target_create/';
+            const path = this.$server+'/shopping/buyService/';
+            const path_1 = this.$server+'/target/server_create/';
+            const path_2 = this.$server+'/target/target_create/';
+
+            const path_3 = this.$server+'/target/server_list/';
 
             console.log(this.target);
-            axios.post(path_1, this.server)
+            axios.post(path_1, this.server,this._config)
             .then(response => {
                 console.log(response);            
                 this.succed=true;
@@ -438,9 +477,10 @@ export default {
             })
             .finally(() => this.loading = false);               
 
-            axios.post(path_2, this.taget)
+
+            axios.post(path_2, this.taget, this._config)
             .then(response => {
-                console.log(response);            
+                console.log('server creados');            
                 this.succed=true;
                 this.success = [];    
                 this.success.push({'message': 'Ocurrio un error revise los datos'});
@@ -448,6 +488,7 @@ export default {
                 this.errors = [];                        
             })
             .catch(error => {              
+                console.log('server error ..');            
                 console.log(error); 
                 this.succed=false;             
                 this.errored = true;
@@ -457,8 +498,15 @@ export default {
             .finally(() => this.loading = false);               
 
             
-            axios.post(path).then(response => {     
-                console.log('Servicio comprado');                
+            this.datasBuy.server = this.serverLen+1;
+            this.datasBuy.target = this.target.id;
+            console.log('Data buy');
+            console.log(this.datasBuy);
+
+            axios.post(path, 
+                this.datasBuy,
+                this._config
+            ).then(response => {             
                 this.goToConfrmation();                               
             }).catch(error => {            
                 console.log('¡Ocurrio un error!');
@@ -471,7 +519,7 @@ export default {
                     "¡Validar los datos, ha ocuurrido un error!!!",
                 });     
                 console.log('EErrorcompra');     
-                 this.goToConfrmation();                                                                                         
+                this.goToConfrmation();                                                                                         
             }).finally(() => this.loading_l=false)            
         },
         send_billling(){
@@ -525,11 +573,14 @@ export default {
     destroyed() {
         window.removeEventListener("scroll", this.color_nav);
     },
-    mounted() {
-        
+    mounted() {        
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);  
         this.color_nav(); 
         this.get_shopping_info();
         this.get_custom_user();                
+        this.getTargets();
+        this.getServerLenght();
 
         $('#state').on('change', function(e) {
             let post = [

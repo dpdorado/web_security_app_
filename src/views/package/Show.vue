@@ -119,7 +119,12 @@
             ]                                  
         },
         attacks_sel:[],
-        state :'',
+        state :'',        
+        _config: {
+          headers: { 
+              Authorization: 'Bearer ' 
+          }
+        }
       }
     }, 
     filters: {      
@@ -153,10 +158,12 @@
         }
     }, 
     mounted() {
-      this.package_o = this.package_;    
-      this.get_attacks();
-      this.set_attacks_sel();
-      this.set_state();
+        var config = localStorage.getItem('config');            
+        this._config = JSON.parse(config);   
+        this.package_o = this.package_;    
+        this.get_attacks();
+        this.set_attacks_sel();
+        this.set_state();
     }
   };  
 </script>
